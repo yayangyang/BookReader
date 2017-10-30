@@ -1,0 +1,58 @@
+<?xml version="1.0" encoding="utf-8"?>
+<manifest xmlns:android="http://schemas.android.com/apk/res/android"
+    package="com.imooc.brvaheasyrecycleview">
+
+    <uses-permission android:name="android.permission.INTERNET"/>
+    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE"/>
+    <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
+    <uses-permission android:name="android.permission.READ_PHONE_STATE"/>
+    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
+    <uses-permission android:name="android.permission.WRITE_SETTINGS"/>
+
+    <application
+        android:allowBackup="true"
+        android:icon="@mipmap/ic_launcher"
+        android:label="@string/app_name"
+        android:roundIcon="@mipmap/ic_launcher_round"
+        android:supportsRtl="true"
+        android:theme="@style/AppTheme"
+        android:name="com.imooc.brvaheasyrecycleview.app.ReaderApplication">
+        <activity android:name=".ui.activity.MainActivity">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+        </activity>
+        <activity android:name=".ui.activity.BookDetailActivity"/>
+        <activity android:name=".ui.activity.BookDiscussionActivity"/>
+        <activity android:name=".ui.activity.BookHelpActivity"/>
+        <activity android:name=".ui.activity.BookReviewActivity"/>
+        <activity android:name=".ui.activity.FeedbackActivity"/>
+        <activity android:name=".ui.activity.GirlBookDiscussionActivity"/>
+        <activity android:name=".ui.activity.ReadActivity"/>
+        <activity android:name=".ui.activity.ScanLocalBookActivity"/>
+        <activity android:name=".ui.activity.SearchActivity"/>
+        <activity android:name=".ui.activity.SettingActivity"/>
+        <activity android:name=".ui.activity.SplashActivity"/>
+        <activity android:name=".ui.activity.SubjectBookListActivity"/>
+        <activity android:name=".ui.activity.TopCategoryListActivity"/>
+        <activity android:name=".ui.activity.TopRankActivity"/>
+        <activity android:name=".ui.activity.WifiBookActivity"/>
+        <activity android:name=".ui.activity.BookReviewDetailActivity"/>
+        <activity android:name=".ui.activity.BookDiscussionDetailActivity"/>
+        <activity android:name=".ui.activity.BookHelpDetailActivity"/>
+        <activity android:name=".ui.activity.SubRankActivity"/>
+        <activity android:name=".ui.activity.SubOtherHomeRankActivity"/>
+        <activity android:name=".ui.activity.SearchByAuthorActivity"/>
+        <activity android:name=".ui.activity.BooksByTagActivity"/>
+        <activity android:name=".ui.activity.BookDetailCommunityActivity"/>
+        <activity android:name=".ui.activity.SubjectBookListDetailActivity"/>
+        <activity android:name=".ui.activity.MyBookListActivity"/>
+        <activity android:name=".ui.activity.SubCategoryListActivity"/>
+        <activity android:name=".ui.activity.BookSourceActivity"/>
+
+        <service android:name=".service.DownloadBookService"/>
+    </application>
+
+</manifest>
