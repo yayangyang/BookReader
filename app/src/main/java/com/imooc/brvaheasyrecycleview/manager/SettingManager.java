@@ -222,4 +222,14 @@ public class SettingManager {
     public void saveNoneCover(boolean isNoneCover) {
         SharedPreferencesUtil.getInstance().putBoolean("isNoneCover", isNoneCover);
     }
+
+
+    public boolean isFirstEnter(){
+        return SharedPreferencesUtil.getInstance().getBoolean("isFirstEnter",true);
+    }
+
+    public void savaFirstEnter(boolean isFirstEnter){
+        SharedPreferencesUtil.getInstance().putBoolean("isFirstEnter",isFirstEnter);
+    }
+
 }

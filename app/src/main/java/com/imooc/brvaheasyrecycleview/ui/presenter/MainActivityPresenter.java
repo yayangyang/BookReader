@@ -4,12 +4,15 @@ import android.util.Log;
 
 import com.imooc.brvaheasyrecycleview.Bean.BookMixAToc;
 import com.imooc.brvaheasyrecycleview.Bean.Recommend;
+import com.imooc.brvaheasyrecycleview.Bean.user.Login;
 import com.imooc.brvaheasyrecycleview.api.BookApi;
 import com.imooc.brvaheasyrecycleview.base.RxPresenter;
 import com.imooc.brvaheasyrecycleview.manager.CollectionsManager;
 import com.imooc.brvaheasyrecycleview.ui.contract.MainContract;
 import com.imooc.brvaheasyrecycleview.utils.LogUtils;
 import com.imooc.brvaheasyrecycleview.utils.ToastUtils;
+
+import org.reactivestreams.Subscription;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -45,7 +48,32 @@ public class MainActivityPresenter extends RxPresenter<MainContract.View> implem
 
     @Override
     public void login(String uid, String token, String platform) {
+        Disposable rxDisposable = bookApi.login(uid, token, platform).subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(
+                        new Consumer<Login>() {
+                            @Override
+                            public void accept(Login data) throws Exception {
+                                if (data != null && mView != null && data.ok) {
+                                    mView.loginSuccess();
+                                    LogUtils.e(data.user.toString());
+                                }
+                            }
+                        },
+                        new Consumer<Throwable>() {
+                            @Override
+                            public void accept(Throwable e) throws Exception {
+                                LogUtils.e("login" + e.toString());
+                            }
+                        },
+                        new Action() {
+                            @Override
+                            public void run() throws Exception {
 
+                            }
+                        }
+                );
+        addDisposable(rxDisposable);
     }
 
     @Override

@@ -13,6 +13,8 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.ImageView;
 
+import com.google.gson.Gson;
+import com.imooc.brvaheasyrecycleview.Bean.user.TencentLoginResult;
 import com.imooc.brvaheasyrecycleview.R;
 import com.imooc.brvaheasyrecycleview.base.BaseActivity;
 import com.imooc.brvaheasyrecycleview.base.Constant;
@@ -32,6 +34,11 @@ import com.imooc.brvaheasyrecycleview.utils.ToastUtils;
 import com.imooc.brvaheasyrecycleview.view.GenderPopupWindow;
 import com.imooc.brvaheasyrecycleview.view.LoginPopupWindow;
 import com.imooc.brvaheasyrecycleview.view.RVPIndicator;
+import com.tencent.tauth.IUiListener;
+import com.tencent.tauth.Tencent;
+import com.tencent.tauth.UiError;
+
+import org.json.JSONObject;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -41,7 +48,7 @@ import javax.inject.Inject;
 
 import butterknife.BindView;
 
-//这里没使用EasyRecyclerview这个框架(还没确定与brvah是否兼容)
+//这里没使用EasyRecyclerview这个类(还没确定与brvah是否兼容)
 public class MainActivity extends BaseActivity implements MainContract.View,LoginPopupWindow.LoginTypeListener{
 
     @BindView(R.id.rvIndicator)
@@ -55,6 +62,9 @@ public class MainActivity extends BaseActivity implements MainContract.View,Logi
     private FragmentPagerAdapter mFragmentPagerAdapter;
     private GenderPopupWindow mGenderPopupWindow;
     private LoginPopupWindow popupWindow;
+
+    private Tencent mTencent;
+    private BaseUIListener loginListener;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -70,7 +80,7 @@ public class MainActivity extends BaseActivity implements MainContract.View,Logi
     public void initDatas() {
         startService(new Intent(this, DownloadBookService.class));
 
-//        mTencent = Tencent.createInstance("1105670298", MainActivity.this);
+        mTencent = Tencent.createInstance("1105670298", MainActivity.this);
 
         mTabContents.add(new RecommendFragment());
         mTabContents.add(new CommunityFragment());
@@ -220,7 +230,7 @@ public class MainActivity extends BaseActivity implements MainContract.View,Logi
 
     @Override
     public void loginSuccess() {
-
+        ToastUtils.showToast("登录成功");
     }
 
     @Override
@@ -242,6 +252,39 @@ public class MainActivity extends BaseActivity implements MainContract.View,Logi
 
     @Override
     public void onLogin(ImageView view, String type) {
-
+        if (type.equals("QQ")) {
+            if (!mTencent.isSessionValid()) {
+                if (loginListener == null) loginListener = new BaseUIListener();
+                LogUtils.e("loginListener不为null,开始登陆");
+                mTencent.login(this, "all", loginListener);
+            }
+        }
+        //4f45e920ff5d1a0e29d997986cd97181
     }
+
+    public class BaseUIListener implements IUiListener {
+
+        @Override
+        public void onComplete(Object o) {
+            LogUtils.e("onComplete");
+            JSONObject jsonObject = (JSONObject) o;
+            String json = jsonObject.toString();
+            Gson gson = new Gson();
+            TencentLoginResult result = gson.fromJson(json, TencentLoginResult.class);
+            LogUtils.e(result.toString());
+            mPresenter.login(result.openid, result.access_token, "QQ");
+        }
+
+        @Override
+        public void onError(UiError uiError) {
+        }
+
+        @Override
+        public void onCancel() {
+
+        }
+    }
+
+
+
 }
