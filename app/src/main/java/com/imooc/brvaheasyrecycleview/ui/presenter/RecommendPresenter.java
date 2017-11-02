@@ -54,6 +54,7 @@ public class RecommendPresenter extends RxPresenter<RecommendContract.View>
                         new Consumer<Recommend>() {
                             @Override
                             public void accept(Recommend recommend) throws Exception {
+                                LogUtils.e("accept");
                                 if (recommend != null) {
                                     List<Recommend.RecommendBooks> list = recommend.books;
                                     if (list != null && !list.isEmpty() && mView != null) {
@@ -69,11 +70,13 @@ public class RecommendPresenter extends RxPresenter<RecommendContract.View>
                             public void accept(Throwable e) throws Exception {
                                 LogUtils.e("getRecommendList", e.toString());
                                 mView.showError();
+                                LogUtils.e("测试");
                             }
                         },
                         new Action() {
                             @Override
                             public void run() throws Exception {
+                                LogUtils.e("complete");
                                 mView.complete();
                             }
                         }

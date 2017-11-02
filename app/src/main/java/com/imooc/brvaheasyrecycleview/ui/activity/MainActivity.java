@@ -34,6 +34,7 @@ import com.imooc.brvaheasyrecycleview.utils.ToastUtils;
 import com.imooc.brvaheasyrecycleview.view.GenderPopupWindow;
 import com.imooc.brvaheasyrecycleview.view.LoginPopupWindow;
 import com.imooc.brvaheasyrecycleview.view.RVPIndicator;
+import com.tencent.connect.common.Constants;
 import com.tencent.tauth.IUiListener;
 import com.tencent.tauth.Tencent;
 import com.tencent.tauth.UiError;
@@ -240,12 +241,6 @@ public class MainActivity extends BaseActivity implements MainContract.View,Logi
         EventManager.refreshCollectionList();
     }
 
-    @Override
-    protected void onDestroy() {
-        super.onDestroy();
-        mPresenter.detachView();
-    }
-
     public void setCurrentItem(int i) {
         mViewPager.setCurrentItem(i);
     }
@@ -285,6 +280,22 @@ public class MainActivity extends BaseActivity implements MainContract.View,Logi
         }
     }
 
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        if (requestCode == Constants.REQUEST_LOGIN || requestCode == Constants.REQUEST_APPBAR) {
+            Tencent.onActivityResultData(requestCode, resultCode, data, loginListener);
+        }
+        super.onActivityResult(requestCode, resultCode, data);
+    }
 
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        DownloadBookService.cancel();
+        stopService(new Intent(this, DownloadBookService.class));
+        if (mPresenter != null) {
+            mPresenter.detachView();
+        }
+    }
 
 }

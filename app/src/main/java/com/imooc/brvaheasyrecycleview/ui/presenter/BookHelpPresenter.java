@@ -55,7 +55,8 @@ public class BookHelpPresenter extends RxPresenter<BookHelpContract.View> implem
                             @Override
                             public void accept(Throwable e) throws Exception {
                                 LogUtils.e("getBookHelpList:" + e.toString());
-                                mView.showError();
+                                boolean isRefresh = start == 0 ? true : false;
+                                mView.showMyError(isRefresh);
                             }
                         },
                         new Action() {

@@ -39,7 +39,7 @@ public abstract class BaseRVFragment<T1 extends BaseContract.BasePresenter, T2,K
     protected RecyclerView mRecyclerView;
     @BindView(R.id.sw)
     protected SwipeRefreshLayout mSwipeRefreshLayout;
-    protected View inflate,network;
+    protected View inflate,network,footView;
     protected BaseQuickAdapter<T2,K> mAdapter;
 
     protected int start = 0;
@@ -65,7 +65,7 @@ public abstract class BaseRVFragment<T1 extends BaseContract.BasePresenter, T2,K
                     onRefresh();
                 }
             });
-            network = View.inflate(mContext, R.layout.activity_nonetwork, null);
+            network = View.inflate(mContext, R.layout.common_net_error_view, null);
             network.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
@@ -127,6 +127,7 @@ public abstract class BaseRVFragment<T1 extends BaseContract.BasePresenter, T2,K
 
     protected void loaddingError() {
         if(mAdapter.getData().size()==0){
+            LogUtils.e("getItemCount:"+mAdapter.getItemCount());
             mAdapter.setEmptyView(network);
         }
         ToastUtils.showToast("网络异常");

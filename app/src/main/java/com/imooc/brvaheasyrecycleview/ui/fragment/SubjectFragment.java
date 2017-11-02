@@ -26,7 +26,8 @@ import org.greenrobot.eventbus.ThreadMode;
 import java.util.ArrayList;
 import java.util.List;
 
-public class SubjectFragment extends BaseRVFragment<SubjectFragmentPresenter, BookLists.BookListsBean,BaseViewHolder> implements SubjectFragmentContract.View {
+public class SubjectFragment extends BaseRVFragment<SubjectFragmentPresenter, BookLists.BookListsBean,BaseViewHolder>
+        implements SubjectFragmentContract.View {
 
     public final static String BUNDLE_TAG = "tag";
     public final static String BUNDLE_TAB = "tab";
@@ -108,7 +109,7 @@ public class SubjectFragment extends BaseRVFragment<SubjectFragmentPresenter, Bo
     }
 
     @Override
-    public void showError(boolean isRefresh) {
+    public void showMyError(boolean isRefresh) {
         loaddingError();
         if(!isRefresh){
             mAdapter.loadMoreFail();

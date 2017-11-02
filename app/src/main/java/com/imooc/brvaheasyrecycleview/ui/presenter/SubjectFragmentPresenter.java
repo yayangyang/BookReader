@@ -54,7 +54,8 @@ public class SubjectFragmentPresenter extends RxPresenter<SubjectFragmentContrac
                             @Override
                             public void accept(Throwable e) throws Exception {
                                 LogUtils.e("getBookLists:" + e.toString());
-                                mView.showError();
+                                boolean isRefresh = start == 0 ? true : false;
+                                mView.showMyError(isRefresh);
                             }
                         },
                         new Action() {

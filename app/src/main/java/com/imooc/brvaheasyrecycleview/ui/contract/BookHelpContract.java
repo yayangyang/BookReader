@@ -24,6 +24,8 @@ public interface BookHelpContract {
 
     interface View extends BaseContract.BaseView {
         void showBookHelpList(List<BookHelpList.HelpsBean> list, boolean isRefresh);
+
+        void showMyError(boolean isRefresh);
     }
 
     interface Presenter extends BaseContract.BasePresenter<View> {

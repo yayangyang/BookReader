@@ -139,4 +139,5 @@ public class GirlBookDiscussionFragment extends BaseRVFragment<GirlBookDiscussio
             start = start + list.size();
         }
     }
+
 }

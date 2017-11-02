@@ -36,6 +36,7 @@ import com.imooc.brvaheasyrecycleview.ui.activity.MainActivity;
 import com.imooc.brvaheasyrecycleview.ui.activity.ReadActivity;
 import com.imooc.brvaheasyrecycleview.ui.contract.RecommendContract;
 import com.imooc.brvaheasyrecycleview.ui.presenter.RecommendPresenter;
+import com.imooc.brvaheasyrecycleview.utils.AppUtils;
 import com.imooc.brvaheasyrecycleview.utils.LogUtils;
 import com.imooc.brvaheasyrecycleview.utils.ToastUtils;
 
@@ -82,14 +83,21 @@ public class RecommendFragment extends BaseRVFragment<RecommendPresenter,Recomme
         initAdapter(RecommendAdapter.class,R.layout.item_recommend_list,null, true, false);
         mAdapter.setOnItemClickListener(this);
         mAdapter.setOnItemLongClickListener(this);
-        View footView = LayoutInflater.from(activity).inflate(R.layout.foot_view_shelf, null, false);
+        footView = LayoutInflater.from(activity).inflate(R.layout.foot_view_shelf, null, false);
         footView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 ((MainActivity) activity).setCurrentItem(2);
             }
         });
-        mAdapter.addFooterView(footView);
+//        mAdapter.setFooterView(footView);//在这里添加脚布局,若数据为空时第一次设置empty布局会crash(不知原因)
+        inflate=View.inflate(AppUtils.getAppContext(),R.layout.bookshelf_empty_view,null);
+        inflate.findViewById(R.id.btnToAdd).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                ((MainActivity) activity).setCurrentItem(2);
+            }
+        });
         onRefresh();
         Log.e("ww","我5");
     }
@@ -106,6 +114,7 @@ public class RecommendFragment extends BaseRVFragment<RecommendPresenter,Recomme
     public void showRecommendList(List<Recommend.RecommendBooks> list) {
         mAdapter.getData().clear();
         mAdapter.addData(list);
+        mAdapter.setFooterView(footView);
         //推荐列表默认加入收藏
         for (Recommend.RecommendBooks bean : list) {
             //TODO 此处可优化：批量加入收藏->加入前需先判断是否收藏过(作者已优化)
@@ -375,6 +384,7 @@ public class RecommendFragment extends BaseRVFragment<RecommendPresenter,Recomme
         if(data!=null){
             mAdapter.addData(data);
         }
+        mAdapter.setEmptyView(inflate);
         //不加下面这句代码会导致，添加本地书籍的时候，部分书籍添加后直接崩溃
         //报错：Scrapped or attached views may not be recycled. isScrap:false isAttached:true
         mAdapter.notifyDataSetChanged();

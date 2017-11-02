@@ -10,7 +10,7 @@ public interface SubjectFragmentContract {
     interface View extends BaseContract.BaseView {
         void showBookList(List<BookLists.BookListsBean> bookLists, boolean isRefresh);
 
-        void showError(boolean isRefresh);
+        void showMyError(boolean isRefresh);
     }
 
     interface Presenter<T> extends BaseContract.BasePresenter<T> {

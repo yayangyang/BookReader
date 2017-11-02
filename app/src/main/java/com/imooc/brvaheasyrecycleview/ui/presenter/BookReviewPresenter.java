@@ -76,7 +76,8 @@ public class BookReviewPresenter extends RxPresenter<BookReviewContract.View> im
                             @Override
                             public void accept(Throwable e) throws Exception {
                                 LogUtils.e("onError: "+e.toString());
-                                mView.showError();
+                                boolean isRefresh = start == 0 ? true : false;
+                                mView.showMyError(isRefresh);
                             }
                         },
                         new Action() {

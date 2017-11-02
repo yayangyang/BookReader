@@ -54,6 +54,11 @@ public class MainActivityPresenter extends RxPresenter<MainContract.View> implem
                         new Consumer<Login>() {
                             @Override
                             public void accept(Login data) throws Exception {
+                                if(data.user!=null){
+                                    LogUtils.e("收到了"+data.toString());
+                                }else{
+                                    LogUtils.e("user为空"+data.ok);
+                                }
                                 if (data != null && mView != null && data.ok) {
                                     mView.loginSuccess();
                                     LogUtils.e(data.user.toString());
@@ -69,7 +74,7 @@ public class MainActivityPresenter extends RxPresenter<MainContract.View> implem
                         new Action() {
                             @Override
                             public void run() throws Exception {
-
+                                LogUtils.e("完成");
                             }
                         }
                 );
