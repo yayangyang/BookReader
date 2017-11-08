@@ -5,21 +5,33 @@ import android.content.Intent;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
+import android.os.Handler;
+import android.os.Message;
 import android.provider.Settings;
 import android.support.v7.app.AppCompatActivity;
+import android.text.TextUtils;
 import android.view.View;
 import android.widget.TextView;
 
 import com.imooc.brvaheasyrecycleview.R;
+import com.imooc.brvaheasyrecycleview.app.ReaderApplication;
 import com.imooc.brvaheasyrecycleview.base.BasePermissionActivity;
+import com.imooc.brvaheasyrecycleview.component.AppComponent;
+import com.imooc.brvaheasyrecycleview.component.DaggerMainComponent;
+import com.imooc.brvaheasyrecycleview.component.DaggerMyComponent;
 import com.imooc.brvaheasyrecycleview.manager.SettingManager;
+import com.imooc.brvaheasyrecycleview.ui.contract.SplashContract;
+import com.imooc.brvaheasyrecycleview.ui.presenter.MainActivityPresenter;
+import com.imooc.brvaheasyrecycleview.ui.presenter.SplashActivityPresenter;
 import com.imooc.brvaheasyrecycleview.utils.LogUtils;
 import com.imooc.brvaheasyrecycleview.utils.ToastUtils;
+
+import javax.inject.Inject;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
 
-public class SplashActivity extends BasePermissionActivity {
+public class SplashActivity extends BasePermissionActivity implements SplashContract.View{
 
     @BindView(R.id.tvSkip)
     TextView tvSkip;
@@ -32,16 +44,34 @@ public class SplashActivity extends BasePermissionActivity {
             Manifest.permission.READ_PHONE_STATE
     };
 
+    @Inject
+    public SplashActivityPresenter mPresenter;
+
+    private Handler mHandler=new Handler(new Handler.Callback() {
+        @Override
+        public boolean handleMessage(Message msg) {
+            if(msg.what==0){
+                startActivity(new Intent(SplashActivity.this, MainActivity.class));
+            }else{
+                startActivity(new Intent(SplashActivity.this, WelcomeActivity.class));
+            }
+            finish();
+            return false;
+        }
+    });
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_splash);
         ButterKnife.bind(this);
+        setupActivityComponent(ReaderApplication.getsInstance().getAppComponent());
+        mPresenter.attachView(this);
 
-        if(SettingManager.getInstance().isFirstEnter()){
+        if (SettingManager.getInstance().isFirstEnter()) {
             init();
             requeset();
-        }else{
+        } else {
             goHome();
         }
     }
@@ -100,12 +130,47 @@ public class SplashActivity extends BasePermissionActivity {
     }
 
     private synchronized void goHome() {
-        startActivity(new Intent(SplashActivity.this, MainActivity.class));
-        finish();
+        //确保有权限后验证是否需要登录
+        if(ReaderApplication.sLogin==null){
+            LogUtils.e("sLogin为空");
+            mHandler.sendEmptyMessageDelayed(1,1000);
+        }else if(!TextUtils.isEmpty(ReaderApplication.sLogin.token)){
+            mPresenter.checkLogin(ReaderApplication.sLogin.token);
+        }
+    }
+
+    public void setupActivityComponent(AppComponent appComponent) {
+        DaggerMyComponent.builder()
+                .appComponent(appComponent)
+                .build()
+                .inject(this);
+    }
+
+    @Override
+    public void showIsLogin(boolean isLogin) {
+        if(!isLogin){
+            ReaderApplication.sLogin=null;
+            SettingManager.getInstance().saveLoginInfo(null);
+            mHandler.sendEmptyMessageDelayed(1,1000);
+        }else{
+            mHandler.sendEmptyMessageDelayed(0,1000);
+        }
+    }
+
+    @Override
+    public void showError() {
+
+    }
+
+    @Override
+    public void complete() {
+
     }
 
     @Override
     protected void onDestroy() {
         super.onDestroy();
+        mPresenter.detachView();
     }
+
 }

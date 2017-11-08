@@ -202,4 +202,5 @@ public class SelectionLayout extends LinearLayout {
     public void setOnSelectListener(OnSelectListener listener) {
         this.listener = listener;
     }
+
 }

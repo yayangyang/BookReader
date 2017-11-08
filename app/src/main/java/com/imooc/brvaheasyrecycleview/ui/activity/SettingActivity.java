@@ -5,10 +5,14 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.widget.SwitchCompat;
+import android.view.Menu;
+import android.view.MenuItem;
 import android.widget.CompoundButton;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.imooc.brvaheasyrecycleview.R;
+import com.imooc.brvaheasyrecycleview.app.ReaderApplication;
 import com.imooc.brvaheasyrecycleview.base.BaseActivity;
 import com.imooc.brvaheasyrecycleview.base.Constant;
 import com.imooc.brvaheasyrecycleview.component.AppComponent;
@@ -16,16 +20,26 @@ import com.imooc.brvaheasyrecycleview.component.DaggerMainComponent;
 import com.imooc.brvaheasyrecycleview.manager.CacheManager;
 import com.imooc.brvaheasyrecycleview.manager.EventManager;
 import com.imooc.brvaheasyrecycleview.manager.SettingManager;
+import com.imooc.brvaheasyrecycleview.utils.AppUtils;
+import com.imooc.brvaheasyrecycleview.utils.LogUtils;
 import com.imooc.brvaheasyrecycleview.utils.SharedPreferencesUtil;
+import com.imooc.brvaheasyrecycleview.utils.ToastUtils;
+import com.tencent.tauth.Tencent;
 
 import butterknife.BindView;
 import butterknife.OnClick;
 
 public class SettingActivity extends BaseActivity {
 
-    public static void startActivity(Context context) {
-        context.startActivity(new Intent(context, SettingActivity.class));
+    public static final String INTENT_IS_USER_ENTER = "isUserEnter";
+
+    public static void startActivity(Context context,boolean isUserEnter) {
+        Intent intent = new Intent(context, SettingActivity.class);
+        intent.putExtra(INTENT_IS_USER_ENTER,isUserEnter);
+        context.startActivity(intent);
     }
+
+    private boolean isUserEnter;
 
     @BindView(R.id.mTvSort)
     TextView mTvSort;
@@ -58,6 +72,8 @@ public class SettingActivity extends BaseActivity {
 
     @Override
     public void initDatas() {
+        isUserEnter = getIntent().getBooleanExtra(INTENT_IS_USER_ENTER,false);
+
         new Thread(new Runnable() {
             @Override
             public void run() {
@@ -87,6 +103,47 @@ public class SettingActivity extends BaseActivity {
                 SettingManager.getInstance().saveNoneCover(isChecked);
             }
         });
+    }
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        if(isUserEnter){
+            getMenuInflater().inflate(R.menu.menu_setting, menu);
+        }
+        return true;
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        if(item.getItemId()==R.id.login_exit){
+            new AlertDialog.Builder(mContext)
+                    .setTitle("退出当前账号")
+                    .setMessage("确定退出当前账号吗?")
+                    .setPositiveButton("确定", new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialog, int which) {
+                            if(ReaderApplication.mTencent!=null){
+                                ReaderApplication.mTencent.logout(AppUtils.getAppContext());//退出QQ登录
+                                ReaderApplication.mTencent= Tencent.createInstance("222222", AppUtils.getAppContext());
+                            }
+                            //去除追书神器登录信息(去除之后需要登录)
+                            ReaderApplication.sLogin=null;
+                            SettingManager.getInstance().saveLoginInfo(ReaderApplication.sLogin);
+                            ToastUtils.showToast("已登出");
+                            setResult(1);
+                            finish();
+                            dialog.dismiss();
+                        }
+                    })
+                    .setNegativeButton("取消", new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialog, int which) {
+                            dialog.dismiss();
+                        }
+                    })
+                    .create().show();
+        }
+        return super.onOptionsItemSelected(item);
     }
 
     @OnClick(R.id.bookshelfSort)
@@ -170,4 +227,5 @@ public class SettingActivity extends BaseActivity {
                 })
                 .create().show();
     }
+
 }

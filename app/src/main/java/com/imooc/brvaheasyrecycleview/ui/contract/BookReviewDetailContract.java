@@ -17,11 +17,13 @@ package com.imooc.brvaheasyrecycleview.ui.contract;
 
 import com.imooc.brvaheasyrecycleview.Bean.BookReview;
 import com.imooc.brvaheasyrecycleview.Bean.CommentList;
+import com.imooc.brvaheasyrecycleview.Bean.MyBean.Comment;
 import com.imooc.brvaheasyrecycleview.base.BaseContract;
+import com.imooc.brvaheasyrecycleview.base.BaseLoginContract;
 
 public interface BookReviewDetailContract {
 
-    interface View extends BaseContract.BaseView {
+    interface View extends BaseLoginContract.View {
 
         void showBookReviewDetail(BookReview data);
 
@@ -29,9 +31,10 @@ public interface BookReviewDetailContract {
 
         void showBookReviewComments(CommentList list);
 
+        void publishReviewResult(Comment comment, String content);
     }
 
-    interface Presenter extends BaseContract.BasePresenter<View> {
+    interface Presenter extends BaseLoginContract.Presenter<View> {
 
         void getBookReviewDetail(String id);
 
@@ -39,6 +42,7 @@ public interface BookReviewDetailContract {
 
         void getBookReviewComments(String bookReviewId, int start, int limit);
 
+        void publishReview(String section, final String content, String token);
     }
 
 }

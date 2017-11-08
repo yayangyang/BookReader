@@ -10,6 +10,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.app.AppCompatDelegate;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
+import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.WindowManager;
@@ -22,6 +23,8 @@ import com.imooc.brvaheasyrecycleview.utils.SharedPreferencesUtil;
 import com.imooc.brvaheasyrecycleview.utils.StatusBarCompat;
 import com.imooc.brvaheasyrecycleview.utils.ToastUtils;
 import com.imooc.brvaheasyrecycleview.view.lodding.CustomDialog;
+
+import java.lang.reflect.Method;
 
 import butterknife.ButterKnife;
 
@@ -193,6 +196,33 @@ public abstract class BaseActivity extends AppCompatActivity {
         if(statusBarView != null){
             statusBarView.setBackgroundColor(statusBarColor);
         }
+    }
+
+    public void setIconEnable(Menu menu, boolean enable) {
+        //下面代码使icon可显示
+        try {
+            Class<?> clazz = Class.forName("android.support.v7.view.menu.MenuBuilder");
+            Method m = clazz.getDeclaredMethod("setOptionalIconsVisible", boolean.class);
+            m.setAccessible(true);
+            //MenuBuilder实现Menu接口，创建菜单时，传进来的menu其实就是MenuBuilder对象(java的多态特征)
+            m.invoke(menu, enable);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
+        //下面代码使icon可显示
+//        if (menu != null) {
+//            if (menu.getClass().getSimpleName().equals("MenuBuilder")) {
+//                try{
+//                    LogUtils.e(menu.getClass().getName());
+//                    Method m = menu.getClass().getDeclaredMethod("setOptionalIconsVisible", Boolean.TYPE);
+//                    m.setAccessible(true);
+//                    m.invoke(menu, true);
+//                } catch (Exception e) {
+//                    Log.e(getClass().getSimpleName(), "onMenuOpened Exception", e);
+//                }
+//            }
+//        }
     }
 
 }

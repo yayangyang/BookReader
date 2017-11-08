@@ -107,7 +107,7 @@ public class Constant {
 
         String HELPFUL = "helpful";
 
-        String COMMENT_COUNT = "comment-count";
+        String COMMENT_COUNT = "Comment-count";
     }
 
     public static List<String> sortTypeList = new ArrayList<String>() {{

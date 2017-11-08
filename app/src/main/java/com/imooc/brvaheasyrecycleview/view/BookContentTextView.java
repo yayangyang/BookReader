@@ -95,4 +95,5 @@ public class BookContentTextView extends AppCompatTextView {
             SearchActivity.startActivity(getContext(), name.replaceAll("》","").replaceAll("《",""));
         }
     }
+
 }

@@ -9,20 +9,27 @@ import android.provider.Settings;
 import android.support.v7.app.AppCompatDelegate;
 import android.util.Log;
 
+import com.imooc.brvaheasyrecycleview.Bean.user.Login;
 import com.imooc.brvaheasyrecycleview.base.Constant;
 import com.imooc.brvaheasyrecycleview.base.CrashHandler;
 import com.imooc.brvaheasyrecycleview.component.AppComponent;
 import com.imooc.brvaheasyrecycleview.component.DaggerAppComponent;
+import com.imooc.brvaheasyrecycleview.manager.SettingManager;
 import com.imooc.brvaheasyrecycleview.module.AppModule;
 import com.imooc.brvaheasyrecycleview.module.BookApiModule;
 import com.imooc.brvaheasyrecycleview.utils.AppUtils;
 import com.imooc.brvaheasyrecycleview.utils.LogUtils;
 import com.imooc.brvaheasyrecycleview.utils.SharedPreferencesUtil;
+import com.tencent.tauth.Tencent;
 
 public class ReaderApplication extends Application {
 
     private static ReaderApplication sInstance;
+    public static Tencent mTencent;
     private AppComponent appComponent;
+
+
+    public static Login sLogin;
 
     @Override
     public void onCreate() {
@@ -34,6 +41,13 @@ public class ReaderApplication extends Application {
         initPrefs();
         initNightMode();
         //initHciCloud();
+
+        initLoginInfo();
+    }
+
+    private void initLoginInfo() {
+        mTencent = Tencent.createInstance("222222", AppUtils.getAppContext());
+        sLogin= SettingManager.getInstance().getLoginInfo();
     }
 
     public static ReaderApplication getsInstance() {

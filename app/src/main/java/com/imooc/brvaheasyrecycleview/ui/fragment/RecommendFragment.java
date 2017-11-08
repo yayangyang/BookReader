@@ -377,7 +377,6 @@ public class RecommendFragment extends BaseRVFragment<RecommendPresenter,Recomme
             return;
         }
 
-
         gone(llBatchManagement);
         List<Recommend.RecommendBooks> data = CollectionsManager.getInstance().getCollectionListBySort();
         mAdapter.getData().clear();

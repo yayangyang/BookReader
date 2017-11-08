@@ -1,0 +1,63 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <android.support.v4.view.ViewPager
+        android:id="@+id/myViewPager"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+    </android.support.v4.view.ViewPager>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:gravity="center"
+        android:layout_above="@+id/my_bottom_btn">
+
+        <ImageView
+            android:id="@+id/image01"
+            android:layout_width="10dp"
+            android:layout_height="10dp"
+            android:src="@drawable/bg_my_checked_point"/>
+
+        <ImageView
+            android:id="@+id/image02"
+            android:layout_width="10dp"
+            android:layout_height="10dp"
+            android:layout_marginLeft="20dp"
+            android:background="@drawable/bg_my_unchecked_point"/>
+
+    </LinearLayout>
+
+    <LinearLayout
+        android:id="@+id/my_bottom_btn"
+        android:layout_width="match_parent"
+        android:layout_height="50dp"
+        android:gravity="center"
+        android:layout_alignParentBottom="true"
+        android:weightSum="100"
+        android:padding="5dp"
+        android:orientation="horizontal">
+
+        <Button
+            android:id="@+id/btn_login"
+            android:layout_width="0dp"
+            android:layout_weight="49"
+            android:layout_height="match_parent"
+            android:background="@drawable/shape_common_btn_selector"
+            android:text="快速登录"/>
+
+        <Button
+            android:id="@+id/btn_enter"
+            android:layout_width="0dp"
+            android:layout_weight="49"
+            android:layout_height="match_parent"
+            android:background="@drawable/shape_common_btn_selector"
+            android:layout_marginLeft="10dp"
+            android:text="直接进入"/>
+
+    </LinearLayout>
+
+</RelativeLayout>

@@ -5,6 +5,7 @@ import android.content.Intent;
 import android.graphics.drawable.Drawable;
 import android.support.v4.app.FragmentActivity;
 import android.support.v4.content.ContextCompat;
+import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.text.TextUtils;
@@ -19,6 +20,7 @@ import com.chad.library.adapter.base.BaseQuickAdapter;
 import com.imooc.brvaheasyrecycleview.Bean.BookDetail;
 import com.imooc.brvaheasyrecycleview.Bean.BookLists;
 import com.imooc.brvaheasyrecycleview.Bean.HotReview;
+import com.imooc.brvaheasyrecycleview.Bean.InterestBookList;
 import com.imooc.brvaheasyrecycleview.Bean.Recommend;
 import com.imooc.brvaheasyrecycleview.Bean.RecommendBookList;
 import com.imooc.brvaheasyrecycleview.Bean.support.RefreshCollectionIconEvent;
@@ -30,10 +32,12 @@ import com.imooc.brvaheasyrecycleview.component.DaggerBookComponent;
 import com.imooc.brvaheasyrecycleview.manager.CollectionsManager;
 import com.imooc.brvaheasyrecycleview.transform.GlideRoundTransform;
 import com.imooc.brvaheasyrecycleview.ui.adapter.HotReviewAdapter;
+import com.imooc.brvaheasyrecycleview.ui.adapter.InterestBookAdapter;
 import com.imooc.brvaheasyrecycleview.ui.adapter.RecommendBookListAdapter;
 import com.imooc.brvaheasyrecycleview.ui.contract.BookDetailContract;
 import com.imooc.brvaheasyrecycleview.ui.presenter.BookDetailPresenter;
 import com.imooc.brvaheasyrecycleview.utils.FormatUtils;
+import com.imooc.brvaheasyrecycleview.utils.LogUtils;
 import com.imooc.brvaheasyrecycleview.utils.ToastUtils;
 import com.imooc.brvaheasyrecycleview.view.DrawableCenterButton;
 import com.imooc.brvaheasyrecycleview.view.TagColor;
@@ -64,6 +68,7 @@ public class BookDetailActivity extends BaseActivity
     public static String INTENT_BOOK_ID = "bookId";
 
     public static void startActivity(Context context, String bookId) {
+        LogUtils.e("bookId:"+bookId);
         context.startActivity(new Intent(context, BookDetailActivity.class)
                 .putExtra(INTENT_BOOK_ID, bookId));
     }
@@ -110,6 +115,11 @@ public class BookDetailActivity extends BaseActivity
     @BindView(R.id.rvRecommendBoookList)
     RecyclerView mRvRecommendBoookList;
 
+    @BindView(R.id.tvMoreInterest)
+    TextView mTvMoreInterest;
+    @BindView(R.id.rvInterestBook)
+    RecyclerView mRvInterestBook;
+
     @Inject
     BookDetailPresenter mPresenter;
 
@@ -118,7 +128,9 @@ public class BookDetailActivity extends BaseActivity
     private HotReviewAdapter mHotReviewAdapter;
     private List<HotReview.Reviews> mHotReviewList = new ArrayList<>();
     private RecommendBookListAdapter mRecommendBookListAdapter;
+    private InterestBookAdapter mInterestBookAdapter;
     private List<RecommendBookList.RecommendBook> mRecommendBookList = new ArrayList<>();
+    private ArrayList<InterestBookList.InterestBook> mInterestBookList = new ArrayList<>();
     private String bookId;
 
     private boolean collapseLongIntro = true;
@@ -153,11 +165,17 @@ public class BookDetailActivity extends BaseActivity
 
     @Override
     public void configViews() {
-        mRvHotReview.setHasFixedSize(true);//这方法应该不重新计算item的宽高,
+        mRvHotReview.setHasFixedSize(true);
         mRvHotReview.setLayoutManager(new LinearLayoutManager(this));
         mHotReviewAdapter=new HotReviewAdapter(R.layout.item_book_detai_hot_review_list,mHotReviewList);
         mHotReviewAdapter.setOnItemClickListener(this);
         mRvHotReview.setAdapter(mHotReviewAdapter);
+
+        mRvInterestBook.setHasFixedSize(true);
+        mRvInterestBook.setLayoutManager(new GridLayoutManager(this,4));
+        mInterestBookAdapter=new InterestBookAdapter(R.layout.item_book_detail_interest_book,mInterestBookList);
+        mInterestBookAdapter.setOnItemClickListener(this);
+        mRvInterestBook.setAdapter(mInterestBookAdapter);
 
         mRvRecommendBoookList.setHasFixedSize(true);
         mRvRecommendBoookList.setLayoutManager(new LinearLayoutManager(this));
@@ -173,8 +191,10 @@ public class BookDetailActivity extends BaseActivity
             }
         });
 
+
         mPresenter.getBookDetail(bookId);
         mPresenter.getHotReview(bookId);
+        mPresenter.getInterestBook(bookId);
         mPresenter.getRecommendBookList(bookId,"3");
     }
 
@@ -254,19 +274,31 @@ public class BookDetailActivity extends BaseActivity
     }
 
     @Override
-    public void showHotReview(List<HotReview.Reviews> list) {
+    public void showHotReview(List<HotReview.Reviews> data) {
         mHotReviewList.clear();
-        Log.e("list.size()","ww"+list.size());
-        mHotReviewList.addAll(list);
+        Log.e("list.size()","ww"+data.size());
+        mHotReviewList.addAll(data);
         mHotReviewAdapter.notifyDataSetChanged();
     }
 
     @Override
-    public void showRecommendBookList(List<RecommendBookList.RecommendBook> list) {
-        if (!list.isEmpty()) {
+    public void showInterestBook(List<InterestBookList.InterestBook> data) {
+        LogUtils.e("showInterestBook");
+        if(data!=null&&!data.isEmpty()){
+            ArrayList<InterestBookList.InterestBook> interestBooks = new ArrayList<>();
+            for(int i=0;i<4;i++){
+                interestBooks.add(data.get(i));
+            }
+            mInterestBookAdapter.setNewData(interestBooks);
+        }
+    }
+
+    @Override
+    public void showRecommendBookList(List<RecommendBookList.RecommendBook> data) {
+        if (!data.isEmpty()) {
             mTvRecommendBookList.setVisibility(View.VISIBLE);
             mRecommendBookList.clear();
-            mRecommendBookList.addAll(list);
+            mRecommendBookList.addAll(data);
             mRecommendBookListAdapter.notifyDataSetChanged();
         }
     }
@@ -336,6 +368,15 @@ public class BookDetailActivity extends BaseActivity
         BookDetailCommunityActivity.startActivity(this, bookId, mTvBookTitle.getText().toString(), 1);
     }
 
+    @OnClick(R.id.tvMoreInterest)
+    public void onClickMoreInterest() {
+        ArrayList<InterestBookList.InterestBook> data = (ArrayList<InterestBookList.InterestBook>) mInterestBookAdapter.getData();
+        if(data!=null){
+            LogUtils.e("id:"+data.get(0)._id);
+            SearchByInterestActivity.startActivity(this, data);
+        }
+    }
+
     @OnClick(R.id.rlCommunity)
     public void onClickCommunity() {
         BookDetailCommunityActivity.startActivity(this, bookId, mTvBookTitle.getText().toString(), 0);
@@ -362,11 +403,10 @@ public class BookDetailActivity extends BaseActivity
     public void onItemClick(BaseQuickAdapter adapter, View view, int position) {
         Object data = adapter.getItem(position);
         if (data instanceof HotReview.Reviews) {
-            BookDiscussionDetailActivity.startActivity(this, ((HotReview.Reviews) data)._id);
+            BookReviewDetailActivity.startActivity(this, ((HotReview.Reviews) data)._id);
         } else if (data instanceof RecommendBookList.RecommendBook) {
             RecommendBookList.RecommendBook recommendBook = (RecommendBookList.RecommendBook) data;
 
-            BookLists bookLists = new BookLists();
             BookLists.BookListsBean bookListsBean = new BookLists.BookListsBean();
             bookListsBean._id = recommendBook.id;
             bookListsBean.author = recommendBook.author;
@@ -377,6 +417,9 @@ public class BookDetailActivity extends BaseActivity
             bookListsBean.title = recommendBook.title;
 
             SubjectBookListDetailActivity.startActivity(this, bookListsBean);
-        }
+        }else if (data instanceof InterestBookList.InterestBook) {
+            InterestBookList.InterestBook interestBook = (InterestBookList.InterestBook) adapter.getItem(position);
+            BookDetailActivity.startActivity(this,interestBook._id);
+    }
     }
 }

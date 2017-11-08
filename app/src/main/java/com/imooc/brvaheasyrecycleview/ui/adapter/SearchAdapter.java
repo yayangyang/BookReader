@@ -1,6 +1,5 @@
 package com.imooc.brvaheasyrecycleview.ui.adapter;
 
-
 import android.content.Context;
 import android.support.annotation.LayoutRes;
 import android.support.annotation.Nullable;
@@ -15,6 +14,7 @@ import com.imooc.brvaheasyrecycleview.Bean.SearchDetail;
 import com.imooc.brvaheasyrecycleview.R;
 import com.imooc.brvaheasyrecycleview.base.Constant;
 import com.imooc.brvaheasyrecycleview.transform.GlideCircleTransform;
+import com.imooc.brvaheasyrecycleview.transform.GlideRoundTransform;
 import com.imooc.brvaheasyrecycleview.utils.LogUtils;
 
 import java.util.List;
@@ -30,7 +30,7 @@ public class SearchAdapter extends BaseQuickAdapter<SearchDetail.SearchBooks,Bas
         LogUtils.e("SearchAdapter-convert");
         ImageView view =helper.getView(R.id.ivBookCover);
         Glide.with(mContext).load(Constant.IMG_BASE_URL + item.cover)
-                .placeholder(R.drawable.avatar_default) .transform(new GlideCircleTransform
+                .placeholder(R.drawable.avatar_default) .transform(new GlideRoundTransform
                 (mContext)).into(view);
         helper.setText(R.id.tvBookListTitle, item.title);
         helper.setText(R.id.tvLatelyFollower, String.format(mContext.getString

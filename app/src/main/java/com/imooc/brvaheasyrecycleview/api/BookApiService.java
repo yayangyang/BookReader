@@ -37,6 +37,9 @@ import com.imooc.brvaheasyrecycleview.Bean.DiscussionList;
 import com.imooc.brvaheasyrecycleview.Bean.Disscussion;
 import com.imooc.brvaheasyrecycleview.Bean.HotReview;
 import com.imooc.brvaheasyrecycleview.Bean.HotWord;
+import com.imooc.brvaheasyrecycleview.Bean.InterestBookList;
+import com.imooc.brvaheasyrecycleview.Bean.MyBean.CheckLogin;
+import com.imooc.brvaheasyrecycleview.Bean.MyBean.Comment;
 import com.imooc.brvaheasyrecycleview.Bean.PostCount;
 import com.imooc.brvaheasyrecycleview.Bean.RankingList;
 import com.imooc.brvaheasyrecycleview.Bean.Rankings;
@@ -51,6 +54,8 @@ import java.util.List;
 
 import io.reactivex.Observable;
 import retrofit2.http.Body;
+import retrofit2.http.Field;
+import retrofit2.http.FormUrlEncoded;
 import retrofit2.http.GET;
 import retrofit2.http.POST;
 import retrofit2.http.Path;
@@ -241,7 +246,7 @@ public interface BookApiService {
      * @param duration   all
      * @param sort       updated(默认排序)
      *                   created(最新发布)
-     *                   comment-count(最多评论)
+     *                   Comment-count(最多评论)
      * @param type       all
      * @param start      0
      * @param limit      20
@@ -266,7 +271,7 @@ public interface BookApiService {
      * @param disscussionId->_id
      * @return
      */
-    @GET("/post/{disscussionId}/comment/best")
+    @GET("/post/{disscussionId}/Comment/best")
     Observable<CommentList> getBestComments(@Path("disscussionId") String disscussionId);
 
     /**
@@ -277,7 +282,7 @@ public interface BookApiService {
      * @param limit              30
      * @return
      */
-    @GET("/post/{disscussionId}/comment")
+    @GET("/post/{disscussionId}/Comment")
     Observable<CommentList> getBookDisscussionComments(@Path("disscussionId") String disscussionId, @Query("start") String start, @Query("limit") String limit);
 
     /**
@@ -289,7 +294,7 @@ public interface BookApiService {
      * @param sort       updated(默认排序)
      *                   created(最新发布)
      *                   helpful(最有用的)
-     *                   comment-count(最多评论)
+     *                   Comment-count(最多评论)
      * @param type       all(全部类型)、xhqh(玄幻奇幻)、dsyn(都市异能)...
      * @param start      0
      * @param limit      20
@@ -316,7 +321,7 @@ public interface BookApiService {
      * @param limit             30
      * @return
      */
-    @GET("/post/review/{bookReviewId}/comment")
+    @GET("/post/review/{bookReviewId}/Comment")
     Observable<CommentList> getBookReviewComments(@Path("bookReviewId") String bookReviewId, @Query("start") String start, @Query("limit") String limit);
 
     /**
@@ -327,7 +332,7 @@ public interface BookApiService {
      * @param duration   all
      * @param sort       updated(默认排序)
      *                   created(最新发布)
-     *                   comment-count(最多评论)
+     *                   Comment-count(最多评论)
      * @param start      0
      * @param limit      20
      * @param distillate true(精品) 、空字符（全部）
@@ -365,7 +370,7 @@ public interface BookApiService {
      * @param book  bookId
      * @param sort  updated(默认排序)
      *              created(最新发布)
-     *              comment-count(最多评论)
+     *              Comment-count(最多评论)
      * @param type  normal
      *              vote
      * @param start 0
@@ -382,7 +387,7 @@ public interface BookApiService {
      * @param sort  updated(默认排序)
      *              created(最新发布)
      *              helpful(最有用的)
-     *              comment-count(最多评论)
+     *              Comment-count(最多评论)
      * @param start 0
      * @param limit 20
      * @return
@@ -392,4 +397,33 @@ public interface BookApiService {
 
     @GET("/post/original")
     Observable<DiscussionList> getBookOriginalList(@Query("block") String block, @Query("duration") String duration, @Query("sort") String sort, @Query("type") String type, @Query("start") String start, @Query("limit") String limit, @Query("distillate") String distillate);
+
+    /**
+     * 提交评论
+     *
+     * @param section   section(版块)
+     * @param content   content(内容)
+     * @param token     token(账号登录的token)
+     * @return
+     */
+    @FormUrlEncoded//post需加上这个
+    @POST("post/{section}/comment")
+    Observable<Comment> publishReview(@Path("section") String section, @Field("content") String content, @Field("token") String token);
+
+    /**
+     * 检查是否登录
+     *
+     * @param token token(记录登录的令牌)
+     * @return
+     */
+    @GET("user/notification/count")
+    Observable<CheckLogin> checkLogin(@Query("token") String token);
+
+    /**
+     * 获取书籍推荐列表
+     * @param bookId
+     * @return
+     */
+    @GET("book/{bookId}/recommend")
+    Observable<InterestBookList> getInterestBookList(@Path("bookId") String bookId);
 }

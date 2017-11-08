@@ -1,20 +1,4 @@
-/**
- * Copyright 2016 JustWayward Team
- * <p>
- * Licensed under the Apache License, Version 2.0 (the "License");
- * you may not use this file except in compliance with the License.
- * You may obtain a copy of the License at
- * <p>
- * http://www.apache.org/licenses/LICENSE-2.0
- * <p>
- * Unless required by applicable law or agreed to in writing, software
- * distributed under the License is distributed on an "AS IS" BASIS,
- * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- * See the License for the specific language governing permissions and
- * limitations under the License.
- */
 package com.imooc.brvaheasyrecycleview.api;
-
 
 import com.imooc.brvaheasyrecycleview.Bean.AutoComplete;
 import com.imooc.brvaheasyrecycleview.Bean.BookDetail;
@@ -37,6 +21,9 @@ import com.imooc.brvaheasyrecycleview.Bean.DiscussionList;
 import com.imooc.brvaheasyrecycleview.Bean.Disscussion;
 import com.imooc.brvaheasyrecycleview.Bean.HotReview;
 import com.imooc.brvaheasyrecycleview.Bean.HotWord;
+import com.imooc.brvaheasyrecycleview.Bean.InterestBookList;
+import com.imooc.brvaheasyrecycleview.Bean.MyBean.CheckLogin;
+import com.imooc.brvaheasyrecycleview.Bean.MyBean.Comment;
 import com.imooc.brvaheasyrecycleview.Bean.RankingList;
 import com.imooc.brvaheasyrecycleview.Bean.Rankings;
 import com.imooc.brvaheasyrecycleview.Bean.Recommend;
@@ -48,6 +35,7 @@ import com.imooc.brvaheasyrecycleview.base.Constant;
 
 import java.util.List;
 
+import io.reactivex.Completable;
 import io.reactivex.Observable;
 import okhttp3.OkHttpClient;
 import retrofit2.Retrofit;
@@ -55,12 +43,6 @@ import retrofit2.adapter.rxjava2.RxJava2CallAdapterFactory;
 import retrofit2.converter.gson.GsonConverterFactory;
 import retrofit2.http.Query;
 
-/**
- * https://github.com/JustWayward/BookReader
- *
- * @author yuyh.
- * @date 2016/8/3.
- */
 public class BookApi {
 
     public static BookApi instance;
@@ -219,4 +201,15 @@ public class BookApi {
         return service.getBookDisscussionList(block, duration, sort, type, start, limit, distillate);
     }
 
+    public Observable<Comment> publishReview(String section, String content, String token){
+        return service.publishReview(section,content,token);
+    }
+
+    public Observable<CheckLogin> checkLogin(String token){
+        return service.checkLogin(token);
+    }
+
+    public Observable<InterestBookList> getInterestBookList(String bookId) {
+        return service.getInterestBookList(bookId);
+    }
 }

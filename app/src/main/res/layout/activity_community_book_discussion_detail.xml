@@ -8,6 +8,16 @@
 
     <include layout="@layout/common_toolbar" />
 
-    <include layout="@layout/activity_easyrecyclerview"/>
+    <com.imooc.brvaheasyrecycleview.view.myView.InterceptFrameLayout
+        android:id="@+id/control"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="1">
+
+        <include layout="@layout/activity_easyrecyclerview"/>
+
+    </com.imooc.brvaheasyrecycleview.view.myView.InterceptFrameLayout>
+
+    <include layout="@layout/activity_bottomframe"/>
 
 </LinearLayout>

@@ -53,6 +53,10 @@
         <activity android:name=".ui.activity.MyBookListActivity"/>
         <activity android:name=".ui.activity.SubCategoryListActivity"/>
         <activity android:name=".ui.activity.BookSourceActivity"/>
+        <activity android:name=".ui.activity.UserInfoActivity"/>
+        <activity android:name=".ui.activity.UserMessageActivity"/>
+        <activity android:name=".ui.activity.WelcomeActivity"/>
+        <activity android:name=".ui.activity.SearchByInterestActivity"/>
 
         <service android:name=".service.DownloadBookService"/>
 
@@ -66,7 +70,9 @@
                 <category android:name="android.intent.category.DEFAULT" />
                 <category android:name="android.intent.category.BROWSABLE" />
 
-                <data android:scheme="1105670298" />
+                <!--官方测试ID-->
+                <data android:scheme="tencent222222" />
+                <!--1106509774这个未审核不能用,只能用开发者设置的qq(仍不能正常使用)-->
             </intent-filter>
         </activity>
         <activity

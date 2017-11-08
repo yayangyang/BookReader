@@ -60,7 +60,7 @@ public class MainActivityPresenter extends RxPresenter<MainContract.View> implem
                                     LogUtils.e("user为空"+data.ok);
                                 }
                                 if (data != null && mView != null && data.ok) {
-                                    mView.loginSuccess();
+                                    mView.loginSuccess(data);
                                     LogUtils.e(data.user.toString());
                                 }
                             }

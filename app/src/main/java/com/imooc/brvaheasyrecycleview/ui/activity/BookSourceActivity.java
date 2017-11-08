@@ -5,10 +5,13 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.support.v7.app.AlertDialog;
 import android.view.View;
+import android.widget.ImageView;
 
 import com.chad.library.adapter.base.BaseQuickAdapter;
 import com.chad.library.adapter.base.BaseViewHolder;
 import com.imooc.brvaheasyrecycleview.Bean.BookSource;
+import com.imooc.brvaheasyrecycleview.Bean.user.Login;
+import com.imooc.brvaheasyrecycleview.Bean.user.TencentLoginResult;
 import com.imooc.brvaheasyrecycleview.R;
 import com.imooc.brvaheasyrecycleview.base.BaseRVActivity;
 import com.imooc.brvaheasyrecycleview.component.AppComponent;

@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/myll"
+    android:layout_width="match_parent"
+    android:layout_height="50dp"
+    android:orientation="horizontal"
+    android:visibility="gone">
+
+    <EditText
+        android:id="@+id/edit_add"
+        android:layout_width="0dp"
+        android:layout_weight="7"
+        android:layout_height="match_parent"
+        android:hint="添加评论"/>
+
+    <android.support.design.widget.FloatingActionButton
+        android:id="@+id/btn_send"
+        android:layout_width="0dp"
+        android:layout_weight="1"
+        android:layout_height="match_parent"
+        android:src="@mipmap/ic_launcher"
+        android:background="@color/colorPrimary" />
+
+</LinearLayout>

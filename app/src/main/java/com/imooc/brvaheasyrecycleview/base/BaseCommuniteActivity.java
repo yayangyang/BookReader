@@ -112,7 +112,8 @@ public abstract class BaseCommuniteActivity extends BaseActivity implements Sele
         }
 
         LogUtils.e(distillate+"ww"+type+"ww"+sort);
-        EventBus.getDefault().post(new SelectionEvent(distillate, type, sort));
+        EventBus.getDefault().post(new SelectionEvent(distillate, type, sort));//可看出EventBus立即执行
+        LogUtils.e(distillate+"ww"+type+"ww"+sort);
     }
 }
 

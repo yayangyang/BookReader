@@ -18,6 +18,7 @@ package com.imooc.brvaheasyrecycleview.ui.contract;
 
 import com.imooc.brvaheasyrecycleview.Bean.BookDetail;
 import com.imooc.brvaheasyrecycleview.Bean.HotReview;
+import com.imooc.brvaheasyrecycleview.Bean.InterestBookList;
 import com.imooc.brvaheasyrecycleview.Bean.RecommendBookList;
 import com.imooc.brvaheasyrecycleview.base.BaseContract;
 
@@ -28,15 +29,19 @@ public interface BookDetailContract {
     interface View extends BaseContract.BaseView {
         void showBookDetail(BookDetail data);
 
-        void showHotReview(List<HotReview.Reviews> list);
+        void showHotReview(List<HotReview.Reviews> data);
 
-        void showRecommendBookList(List<RecommendBookList.RecommendBook> list);
+        void showInterestBook(List<InterestBookList.InterestBook> data);
+
+        void showRecommendBookList(List<RecommendBookList.RecommendBook> data);
     }
 
     interface Presenter<T> extends BaseContract.BasePresenter<T> {
         void getBookDetail(String bookId);
 
-        void getHotReview(String book);
+        void getHotReview(String bookId);
+
+        void getInterestBook(String bookId);
 
         void getRecommendBookList(String bookId, String limit);
     }

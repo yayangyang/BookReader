@@ -1,0 +1,72 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:background="@drawable/touch_bg"
+    android:padding="10dp">
+
+    <ImageView
+        android:id="@+id/ivBookCover"
+        android:layout_width="45dp"
+        android:layout_height="60dp"
+        android:layout_alignParentLeft="true"
+        android:layout_centerVertical="true"
+        android:src="@drawable/cover_default"
+        android:scaleType="centerCrop" />
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:layout_marginLeft="10dp"
+        android:layout_toRightOf="@+id/ivBookCover">
+
+        <TextView
+            android:id="@+id/tvBookListTitle"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:ellipsize="end"
+            android:singleLine="true"
+            android:text="元尊"
+            android:textColor="@color/common_h1"
+            android:textSize="16sp" />
+
+        <TextView
+            android:id="@+id/tvAuthor"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/tvBookListTitle"
+            android:ellipsize="end"
+            android:singleLine="true"
+            android:text="天蚕土豆 | "
+            android:textColor="@color/common_h2"
+            android:textSize="13sp" />
+
+        <TextView
+            android:id="@+id/tvShortIntro"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/tvBookListTitle"
+            android:layout_toRightOf="@id/tvLatelyFollower"
+            android:ellipsize="end"
+            android:singleLine="true"
+            android:text="彼时的归途，已是一条命运倒悬的路。\r\n昔日的荣华，如白云苍狗，恐大梦一场。\r\n少年执笔"
+            android:textColor="@color/common_h2"
+            android:textSize="13sp" />
+
+        <TextView
+            android:id="@+id/tvFans"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/tvBookListTitle"
+            android:layout_toRightOf="@id/tvRetentionRatio"
+            android:ellipsize="end"
+            android:singleLine="true"
+            android:text="113468 人在追 | 60.73% 读者留存"
+            android:textColor="@color/common_h2"
+            android:textSize="13sp" />
+
+
+    </LinearLayout>
+
+</RelativeLayout>

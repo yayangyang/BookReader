@@ -334,6 +334,45 @@
                     android:src="@drawable/game_right_arrow" />
             </RelativeLayout>
 
+            <LinearLayout
+                android:id="@+id/llInterest"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:padding="15dp"
+                android:orientation="vertical">
+
+                <RelativeLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent">
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="5dp"
+                        android:text="你可能感兴趣"
+                        android:textColor="@color/common_h2"
+                        android:textSize="13sp" />
+
+                    <TextView
+                        android:id="@+id/tvMoreInterest"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="5dp"
+                        android:layout_alignParentRight="true"
+                        android:text="更多"
+                        android:textColor="@color/common_h2"
+                        android:textSize="13sp" />
+
+                </RelativeLayout>
+
+                <android.support.v7.widget.RecyclerView
+                    android:id="@+id/rvInterestBook"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content">
+                </android.support.v7.widget.RecyclerView>
+
+            </LinearLayout>
+
             <View
                 android:layout_width="match_parent"
                 android:layout_height="10dp"

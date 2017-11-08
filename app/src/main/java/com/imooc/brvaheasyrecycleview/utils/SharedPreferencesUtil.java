@@ -161,12 +161,15 @@ public class SharedPreferencesUtil {
         ByteArrayOutputStream baos = new ByteArrayOutputStream();
         ObjectOutputStream out = null;
         try {
+            LogUtils.e("提交11");
             out = new ObjectOutputStream(baos);
             out.writeObject(object);
             String objectVal = new String(Base64.encode(baos.toByteArray(), Base64.DEFAULT));
             editor.putString(key, objectVal);
             editor.commit();
+            LogUtils.e("提交");
         } catch (IOException e) {
+            LogUtils.e(e.toString()+"出错");
             e.printStackTrace();
         } finally {
             try {
@@ -191,6 +194,7 @@ public class SharedPreferencesUtil {
             try {
                 ois = new ObjectInputStream(bais);
                 T t = (T) ois.readObject();
+                LogUtils.e("取得");
                 return t;
             } catch (StreamCorruptedException e) {
                 e.printStackTrace();

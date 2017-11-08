@@ -1,8 +1,12 @@
 package com.imooc.brvaheasyrecycleview.ui.fragment;
 
+import android.content.Context;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.MotionEvent;
 import android.view.View;
+import android.view.inputmethod.InputMethodManager;
+import android.widget.LinearLayout;
 
 import com.chad.library.adapter.base.BaseQuickAdapter;
 import com.chad.library.adapter.base.BaseViewHolder;
@@ -11,6 +15,7 @@ import com.imooc.brvaheasyrecycleview.Bean.Disscussion;
 import com.imooc.brvaheasyrecycleview.Bean.support.SelectionEvent;
 import com.imooc.brvaheasyrecycleview.R;
 import com.imooc.brvaheasyrecycleview.app.ReaderApplication;
+import com.imooc.brvaheasyrecycleview.base.BaseActivity;
 import com.imooc.brvaheasyrecycleview.base.BaseRVFragment;
 import com.imooc.brvaheasyrecycleview.base.Constant;
 import com.imooc.brvaheasyrecycleview.component.AppComponent;
@@ -19,6 +24,8 @@ import com.imooc.brvaheasyrecycleview.ui.activity.BookDiscussionDetailActivity;
 import com.imooc.brvaheasyrecycleview.ui.adapter.BookDiscussionAdapter;
 import com.imooc.brvaheasyrecycleview.ui.contract.BookDiscussionContract;
 import com.imooc.brvaheasyrecycleview.ui.presenter.BookDiscussionPresenter;
+import com.imooc.brvaheasyrecycleview.utils.AppUtils;
+import com.imooc.brvaheasyrecycleview.utils.KeybordS;
 import com.imooc.brvaheasyrecycleview.utils.LogUtils;
 
 import org.greenrobot.eventbus.EventBus;
@@ -29,6 +36,10 @@ import java.util.ArrayList;
 import java.util.List;
 
 import javax.inject.Inject;
+
+import butterknife.BindView;
+import butterknife.ButterKnife;
+import butterknife.OnClick;
 
 /**
  * Created by Administrator on 2017/10/19.
@@ -154,4 +165,5 @@ public class BookDiscussionFragment extends BaseRVFragment<BookDiscussionPresent
             start = start + list.size();
         }
     }
+
 }

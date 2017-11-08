@@ -17,7 +17,9 @@ package com.imooc.brvaheasyrecycleview.manager;
 
 
 import com.imooc.brvaheasyrecycleview.Bean.support.BookMark;
+import com.imooc.brvaheasyrecycleview.Bean.user.Login;
 import com.imooc.brvaheasyrecycleview.base.Constant;
+import com.imooc.brvaheasyrecycleview.utils.LogUtils;
 import com.imooc.brvaheasyrecycleview.utils.ScreenUtils;
 import com.imooc.brvaheasyrecycleview.utils.SharedPreferencesUtil;
 import com.imooc.brvaheasyrecycleview.utils.ToastUtils;
@@ -223,6 +225,7 @@ public class SettingManager {
         SharedPreferencesUtil.getInstance().putBoolean("isNoneCover", isNoneCover);
     }
 
+    //自己定义-------------------------------------------------------------------------
 
     public boolean isFirstEnter(){
         return SharedPreferencesUtil.getInstance().getBoolean("isFirstEnter",true);
@@ -230,6 +233,14 @@ public class SettingManager {
 
     public void savaFirstEnter(boolean isFirstEnter){
         SharedPreferencesUtil.getInstance().putBoolean("isFirstEnter",isFirstEnter);
+    }
+
+    public Login getLoginInfo(){
+        return SharedPreferencesUtil.getInstance().getObject("loginInfo",Login.class);
+    }
+
+    public void saveLoginInfo(Object loginInfo){
+        SharedPreferencesUtil.getInstance().putObject("loginInfo",loginInfo);
     }
 
 }

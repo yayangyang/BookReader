@@ -15,6 +15,7 @@
  */
 package com.imooc.brvaheasyrecycleview.utils;
 
+import android.annotation.SuppressLint;
 import android.text.TextUtils;
 
 import java.text.SimpleDateFormat;
@@ -63,11 +64,16 @@ public class FormatUtils {
      * @return
      */
     public static String getDescriptionTimeFromDateString(String dateString) {
+        LogUtils.e("dateString:"+dateString);
         if (TextUtils.isEmpty(dateString))
             return "";
         sdf.applyPattern(FORMAT_DATE_TIME);
         try {
-            return getDescriptionTimeFromDate(sdf.parse(formatZhuiShuDateString(dateString)));
+            long wucha=8*60*60*1000;//追书神器服务器返回时间与真实值的误差(可能为8小时)
+            Date parse = sdf.parse(formatZhuiShuDateString(dateString));
+            parse.setTime(parse.getTime()+wucha);
+
+            return getDescriptionTimeFromDate(parse);
         } catch (Exception e) {
             LogUtils.e("getDescriptionTimeFromDateString: " + e);
         }
@@ -91,7 +97,9 @@ public class FormatUtils {
      * @return
      */
     public static String getDescriptionTimeFromDate(Date date) {
+        LogUtils.e(date.toString());
         long delta = new Date().getTime() - date.getTime();
+        LogUtils.e(delta+"wwwwwwwwwwww");
         if (delta < 1L * ONE_MINUTE) {
             long seconds = toSeconds(delta);
             return (seconds <= 0 ? 1 : seconds) + ONE_SECOND_AGO;
@@ -152,5 +160,17 @@ public class FormatUtils {
         } else {
             return wordCount + "字";
         }
+    }
+
+    //-----------------------------------------------------------------
+    @SuppressLint("SimpleDateFormat")
+    public static String myFormatTime(Date date){
+//        String s = date.getTime() + "";
+//        String milliSsecond = s.substring(s.length() - 3, s.length());
+//        return date.getYear()+1900+"-"+date.getMonth()+1+"-"+date.get
+//                +"T"+date.getHours()+":"+date.getMinutes()+":"+date.getSeconds()+"."
+//                +milliSsecond+"Z";
+        SimpleDateFormat simpleDateFormat = new SimpleDateFormat(FORMAT_DATE_TIME);
+        return simpleDateFormat.format(date);
     }
 }

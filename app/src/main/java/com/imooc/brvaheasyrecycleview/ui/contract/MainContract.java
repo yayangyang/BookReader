@@ -1,5 +1,6 @@
 package com.imooc.brvaheasyrecycleview.ui.contract;
 
+import com.imooc.brvaheasyrecycleview.Bean.user.Login;
 import com.imooc.brvaheasyrecycleview.base.BaseContract;
 
 /**
@@ -9,7 +10,7 @@ import com.imooc.brvaheasyrecycleview.base.BaseContract;
 public interface MainContract {
 
     public interface View extends BaseContract.BaseView{
-        void loginSuccess();
+        void loginSuccess(Login login);
 
         void syncBookShelfCompleted();
     }

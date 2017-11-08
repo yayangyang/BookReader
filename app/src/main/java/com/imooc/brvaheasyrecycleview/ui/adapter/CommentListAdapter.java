@@ -8,12 +8,15 @@ import com.bumptech.glide.Glide;
 import com.chad.library.adapter.base.BaseQuickAdapter;
 import com.chad.library.adapter.base.BaseViewHolder;
 import com.imooc.brvaheasyrecycleview.Bean.CommentList;
+import com.imooc.brvaheasyrecycleview.Bean.user.Login;
 import com.imooc.brvaheasyrecycleview.R;
 import com.imooc.brvaheasyrecycleview.base.Constant;
 import com.imooc.brvaheasyrecycleview.manager.SettingManager;
 import com.imooc.brvaheasyrecycleview.transform.GlideCircleTransform;
 import com.imooc.brvaheasyrecycleview.utils.FormatUtils;
+import com.imooc.brvaheasyrecycleview.utils.LogUtils;
 
+import java.util.Date;
 import java.util.List;
 
 /**
@@ -42,6 +45,8 @@ public class CommentListAdapter extends BaseQuickAdapter<CommentList.CommentsBea
                 .setText(R.id.tvBookType, String.format(mContext.getString(R.string.book_detail_user_lv), item.author.lv))
                 .setText(R.id.tvFloor, String.format(mContext.getString(R.string.comment_floor), item.floor))
                 .setText(R.id.tvTime, FormatUtils.getDescriptionTimeFromDateString(item.created));
+        LogUtils.e("nickname:"+item.author.nickname);
+        LogUtils.e("item.created:"+item.created);
 
         if (item.replyTo == null) {
             helper.setVisible(R.id.tvReplyNickName, false);

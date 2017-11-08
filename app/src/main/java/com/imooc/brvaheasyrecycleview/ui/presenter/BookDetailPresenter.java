@@ -5,6 +5,7 @@ import android.util.Log;
 
 import com.imooc.brvaheasyrecycleview.Bean.BookDetail;
 import com.imooc.brvaheasyrecycleview.Bean.HotReview;
+import com.imooc.brvaheasyrecycleview.Bean.InterestBookList;
 import com.imooc.brvaheasyrecycleview.Bean.RecommendBookList;
 import com.imooc.brvaheasyrecycleview.api.BookApi;
 import com.imooc.brvaheasyrecycleview.base.RxPresenter;
@@ -26,7 +27,8 @@ import io.reactivex.schedulers.Schedulers;
 
 import static android.R.attr.data;
 
-public class BookDetailPresenter extends RxPresenter<BookDetailContract.View> implements BookDetailContract.Presenter<BookDetailContract.View> {
+public class BookDetailPresenter extends RxPresenter<BookDetailContract.View>
+        implements BookDetailContract.Presenter<BookDetailContract.View> {
 
     private BookApi bookApi;
 
@@ -94,6 +96,39 @@ public class BookDetailPresenter extends RxPresenter<BookDetailContract.View> im
                 );
         addDisposable(rxDisposable);
     }
+
+    @Override
+    public void getInterestBook(String bookId) {
+        Disposable rxDisposable = bookApi.getInterestBookList(bookId).subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(
+                        new Consumer<InterestBookList>() {
+                            @Override
+                            public void accept(InterestBookList data) throws Exception {
+                                List<InterestBookList.InterestBook> list = data.books;
+                                if (list != null && !list.isEmpty() && mView != null) {
+                                    mView.showInterestBook(list);
+                                }else{
+                                    LogUtils.e("list为空");
+                                }
+                            }
+                        },
+                        new Consumer<Throwable>() {
+                            @Override
+                            public void accept(Throwable e) throws Exception {
+                                LogUtils.e("+++" + e.toString());
+                            }
+                        },
+                        new Action() {
+                            @Override
+                            public void run() throws Exception {
+
+                            }
+                        }
+                );
+        addDisposable(rxDisposable);
+    }
+
 
     @Override
     public void getRecommendBookList(String bookId, String limit) {

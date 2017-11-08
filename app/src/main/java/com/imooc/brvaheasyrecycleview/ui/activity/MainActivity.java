@@ -1,21 +1,33 @@
 package com.imooc.brvaheasyrecycleview.ui.activity;
 
 import android.content.Intent;
+import android.graphics.Bitmap;
+import android.graphics.Rect;
+import android.graphics.drawable.BitmapDrawable;
+import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentActivity;
 import android.support.v4.app.FragmentPagerAdapter;
+import android.support.v4.view.MenuItemCompat;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatDelegate;
 import android.util.Log;
+import android.view.ActionProvider;
 import android.view.Gravity;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.ImageView;
 
+import com.bumptech.glide.Glide;
+import com.bumptech.glide.request.animation.GlideAnimation;
+import com.bumptech.glide.request.target.SimpleTarget;
 import com.google.gson.Gson;
+import com.imooc.brvaheasyrecycleview.Bean.user.Login;
 import com.imooc.brvaheasyrecycleview.Bean.user.TencentLoginResult;
 import com.imooc.brvaheasyrecycleview.R;
+import com.imooc.brvaheasyrecycleview.app.ReaderApplication;
 import com.imooc.brvaheasyrecycleview.base.BaseActivity;
 import com.imooc.brvaheasyrecycleview.base.Constant;
 import com.imooc.brvaheasyrecycleview.component.AppComponent;
@@ -23,11 +35,13 @@ import com.imooc.brvaheasyrecycleview.component.DaggerMainComponent;
 import com.imooc.brvaheasyrecycleview.manager.EventManager;
 import com.imooc.brvaheasyrecycleview.manager.SettingManager;
 import com.imooc.brvaheasyrecycleview.service.DownloadBookService;
+import com.imooc.brvaheasyrecycleview.transform.GlideCircleTransform;
 import com.imooc.brvaheasyrecycleview.ui.contract.MainContract;
 import com.imooc.brvaheasyrecycleview.ui.fragment.CommunityFragment;
 import com.imooc.brvaheasyrecycleview.ui.fragment.FindFragment;
 import com.imooc.brvaheasyrecycleview.ui.fragment.RecommendFragment;
 import com.imooc.brvaheasyrecycleview.ui.presenter.MainActivityPresenter;
+import com.imooc.brvaheasyrecycleview.utils.AppUtils;
 import com.imooc.brvaheasyrecycleview.utils.LogUtils;
 import com.imooc.brvaheasyrecycleview.utils.SharedPreferencesUtil;
 import com.imooc.brvaheasyrecycleview.utils.ToastUtils;
@@ -41,6 +55,8 @@ import com.tencent.tauth.UiError;
 
 import org.json.JSONObject;
 
+import java.lang.reflect.InvocationTargetException;
+import java.lang.reflect.Method;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
@@ -81,7 +97,7 @@ public class MainActivity extends BaseActivity implements MainContract.View,Logi
     public void initDatas() {
         startService(new Intent(this, DownloadBookService.class));
 
-        mTencent = Tencent.createInstance("1105670298", MainActivity.this);
+        mTencent = Tencent.createInstance("222222", MainActivity.this);
 
         mTabContents.add(new RecommendFragment());
         mTabContents.add(new CommunityFragment());
@@ -108,6 +124,12 @@ public class MainActivity extends BaseActivity implements MainContract.View,Logi
         mRVPIndicator.setViewPager(mViewPager,0);
         mPresenter.attachView(this);
 
+        mRVPIndicator.post(new Runnable() {
+            @Override
+            public void run() {
+                LogUtils.e("wwwwwwwwwwwwwwwwwwwww");
+            }
+        });
         mRVPIndicator.postDelayed(new Runnable() {
             @Override
             public void run() {
@@ -124,6 +146,7 @@ public class MainActivity extends BaseActivity implements MainContract.View,Logi
             }
 
         },500);
+
     }
 
     private void showChooseSexPopupWindow() {
@@ -138,30 +161,77 @@ public class MainActivity extends BaseActivity implements MainContract.View,Logi
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
+        LogUtils.e("onCreateOptionsMenu");//1
         getMenuInflater().inflate(R.menu.menu_main, menu);
+//        MenuItem item = menu.findItem(R.id.action_login);
+//        item.setActionView(R.layout.menu_item);//ActionView应该不是覆盖布局,而是点击了这个item就如同点击这个ActionView对象的效果
+        setIconEnable(menu,true);//调用方法设置menu的icon可显示
         return true;
+    }
+
+    @Override
+    protected boolean onPrepareOptionsPanel(View view, Menu menu) {
+        LogUtils.e("onPrepareOptionsPanel");//2
+        //菜单缩在一起时弹出会调用此方法
+        return super.onPrepareOptionsPanel(view, menu);//@hide方法需反射调用,但这里是返回值不知怎么做
+    }
+
+    @Override
+    public boolean onPrepareOptionsMenu(Menu menu) {
+        LogUtils.e("onPrepareOptionsMenu");//3
+        //菜单缩在一起时弹出会调用此方法
+        final MenuItem item = menu.findItem(R.id.action_login);
+
+        if(ReaderApplication.sLogin!=null&&ReaderApplication.sLogin.user!=null){
+            item.setTitle(ReaderApplication.sLogin.user.nickname);
+            //设置的图标大小太小(目前还没解决)
+            Glide.with(mContext).load(Constant.IMG_BASE_URL + ReaderApplication.sLogin.user.avatar)
+                    .asBitmap().transform(new GlideCircleTransform(mContext)).into(new SimpleTarget<Bitmap>() {
+                @Override
+                public void onResourceReady(Bitmap resource, GlideAnimation<? super Bitmap> glideAnimation) {
+                    BitmapDrawable bitmapDrawable = new BitmapDrawable(resource);
+                    item.setIcon(bitmapDrawable);
+                }
+            });
+        }else{
+            item.setTitle("请登录");
+            item.setIcon(R.drawable.home_menu_0);
+        }
+        return super.onPrepareOptionsMenu(menu);
     }
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         int id = item.getItemId();
+        boolean isLogin=false;
+        if(ReaderApplication.sLogin!=null&&ReaderApplication.sLogin.user!=null){
+            isLogin=ReaderApplication.sLogin.ok;
+        }
         switch (id) {
             case R.id.action_search:
                 startActivity(new Intent(MainActivity.this, SearchActivity.class));
                 break;
             case R.id.action_login:
-                if (popupWindow == null) {
-                    popupWindow = new LoginPopupWindow(this);
-                    popupWindow.setLoginTypeListener(this);
+                if(isLogin){
+                    startActivity(new Intent(MainActivity.this, UserInfoActivity.class));
+                }else{
+                    if (popupWindow == null) {
+                        popupWindow = new LoginPopupWindow(this);
+                        popupWindow.setLoginTypeListener(this);
+                    }
+                    popupWindow.showAtLocation(mCommonToolbar, Gravity.CENTER, 0, 0);
                 }
-                popupWindow.showAtLocation(mCommonToolbar, Gravity.CENTER, 0, 0);
                 break;
             case R.id.action_my_message:
-                if (popupWindow == null) {
-                    popupWindow = new LoginPopupWindow(this);
-                    popupWindow.setLoginTypeListener(this);
+                if(isLogin){
+                    startActivity(new Intent(MainActivity.this, UserMessageActivity.class));
+                }else{
+                    if (popupWindow == null) {
+                        popupWindow = new LoginPopupWindow(this);
+                        popupWindow.setLoginTypeListener(this);
+                    }
+                    popupWindow.showAtLocation(mCommonToolbar, Gravity.CENTER, 0, 0);
                 }
-                popupWindow.showAtLocation(mCommonToolbar, Gravity.CENTER, 0, 0);
                 break;
             case R.id.action_sync_bookshelf:
                 showDialog();
@@ -192,7 +262,7 @@ public class MainActivity extends BaseActivity implements MainContract.View,Logi
                 recreate();
                 break;
             case R.id.action_settings:
-                SettingActivity.startActivity(this);
+                SettingActivity.startActivity(this,false);
                 break;
             default:
                 break;
@@ -216,7 +286,7 @@ public class MainActivity extends BaseActivity implements MainContract.View,Logi
                 .appComponent(appComponent)
                 .build()
                 .inject(this);
-}
+    }
 
     @Override
     public void showError() {
@@ -230,8 +300,11 @@ public class MainActivity extends BaseActivity implements MainContract.View,Logi
     }
 
     @Override
-    public void loginSuccess() {
+    public void loginSuccess(Login login) {
         ToastUtils.showToast("登录成功");
+
+        ReaderApplication.sLogin=login;
+        SettingManager.getInstance().saveLoginInfo(login);//保存登录信息,以便下次登录app使用
     }
 
     @Override
@@ -296,6 +369,7 @@ public class MainActivity extends BaseActivity implements MainContract.View,Logi
         if (mPresenter != null) {
             mPresenter.detachView();
         }
+
     }
 
 }

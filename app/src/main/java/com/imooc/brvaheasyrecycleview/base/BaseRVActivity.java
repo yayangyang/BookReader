@@ -24,7 +24,8 @@ import java.util.List;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 
-public abstract class BaseRVActivity<T,K extends BaseViewHolder> extends BaseActivity implements BaseQuickAdapter.RequestLoadMoreListener, SwipeRefreshLayout.OnRefreshListener, BaseQuickAdapter.OnItemClickListener {
+public abstract class BaseRVActivity<T,K extends BaseViewHolder> extends BaseActivity
+        implements BaseQuickAdapter.RequestLoadMoreListener, SwipeRefreshLayout.OnRefreshListener, BaseQuickAdapter.OnItemClickListener {
 
     @BindView(R.id.recyclerview)
     protected RecyclerView mRecyclerView;
@@ -36,6 +37,10 @@ public abstract class BaseRVActivity<T,K extends BaseViewHolder> extends BaseAct
     protected int start = 0;
     protected int limit = 20;
     protected boolean isConnected=false;//网络是否连接
+
+    protected float y=0;
+    protected int screenHeight = 0;
+    protected int keyHeight = 0;
 
     protected void initAdapter(boolean refreshable, boolean loadmoreable) {
         Log.e("initAdapter","initAdapter");
