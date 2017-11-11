@@ -37,7 +37,7 @@ public class ReaderApplication extends Application {
         sInstance = this;
         initCompoent();
         AppUtils.init(this);
-        CrashHandler.getInstance().init(this);
+//        CrashHandler.getInstance().init(this);
         initPrefs();
         initNightMode();
         //initHciCloud();

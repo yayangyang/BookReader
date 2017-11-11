@@ -22,7 +22,8 @@ import io.reactivex.functions.Action;
 import io.reactivex.functions.Consumer;
 import io.reactivex.schedulers.Schedulers;
 
-public class SubRankPresenter extends RxPresenter<SubRankContract.View> implements SubRankContract.Presenter<SubRankContract.View> {
+public class SubRankPresenter extends RxPresenter<SubRankContract.View>
+        implements SubRankContract.Presenter<SubRankContract.View> {
 
     private BookApi bookApi;
 

@@ -17,7 +17,8 @@ import io.reactivex.functions.Action;
 import io.reactivex.functions.Consumer;
 import io.reactivex.schedulers.Schedulers;
 
-public class SubjectBookListDetailPresenter extends RxPresenter<SubjectBookListDetailContract.View> implements SubjectBookListDetailContract.Presenter<SubjectBookListDetailContract.View> {
+public class SubjectBookListDetailPresenter extends RxPresenter<SubjectBookListDetailContract.View>
+        implements SubjectBookListDetailContract.Presenter<SubjectBookListDetailContract.View> {
 
     private BookApi bookApi;
 

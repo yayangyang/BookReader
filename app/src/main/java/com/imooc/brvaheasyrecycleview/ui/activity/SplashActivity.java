@@ -24,6 +24,7 @@ import com.imooc.brvaheasyrecycleview.ui.contract.SplashContract;
 import com.imooc.brvaheasyrecycleview.ui.presenter.MainActivityPresenter;
 import com.imooc.brvaheasyrecycleview.ui.presenter.SplashActivityPresenter;
 import com.imooc.brvaheasyrecycleview.utils.LogUtils;
+import com.imooc.brvaheasyrecycleview.utils.NetworkUtils;
 import com.imooc.brvaheasyrecycleview.utils.ToastUtils;
 
 import javax.inject.Inject;
@@ -159,7 +160,10 @@ public class SplashActivity extends BasePermissionActivity implements SplashCont
 
     @Override
     public void showError() {
-
+        if(!NetworkUtils.isAvailable(this)){
+            ToastUtils.showToast("网络有问题");
+        }
+        mHandler.sendEmptyMessageDelayed(1,1000);
     }
 
     @Override

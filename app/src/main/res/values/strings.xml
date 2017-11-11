@@ -126,4 +126,10 @@
     <string name="cancle_top">取消置顶</string>
     <string name="to_add">去添加</string>
 
+    <!--my-->
+    <string name="content_review">请输入话题内容\n\n- 需要等级lv.2;\n- 看书容易,写书不易,催更会被打PP;\n- 友好讨论,请勿骂人;\n- 发帖不加经验,勿发水帖;\n- 优质话题将会被指定加精哦,n(*≧▽≦*)n</string>
+    <string name="content_discussion">你的书评会影响大家的选择,望详细评价~\n\n- 需要等级lv.3;\n- 需要至少50个字\n- 必须说明本书的优点或缺点\n- 凑字数书评或恶意书评将被删除或关小黑屋\n- 精品书评会有额外的经验奖励哦</string>
+    <string name="publish_review_tip">"禁止发布以下内容,违反规定将禁封账号\n\n- 与书籍评论无关\n- 标题内容不明确\n- 人身攻击、广告及垃圾信息(含QQ)"</string>
+    <string name="publish_discussion_tip">"禁止发布以下内容,违反规定将禁封账号\n\n- 催更\n- 标题内容不明确\n- 人身攻击、广告及垃圾信息(含QQ)"</string>
+
 </resources>

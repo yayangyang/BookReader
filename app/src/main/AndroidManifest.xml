@@ -57,6 +57,9 @@
         <activity android:name=".ui.activity.UserMessageActivity"/>
         <activity android:name=".ui.activity.WelcomeActivity"/>
         <activity android:name=".ui.activity.SearchByInterestActivity"/>
+        <activity android:name=".ui.activity.PublishReviewActivity"/>
+        <activity android:name=".ui.activity.PublishOptionActivity"/>
+        <activity android:name=".ui.activity.PublishVoteActivity"/>
 
         <service android:name=".service.DownloadBookService"/>
 

@@ -25,7 +25,8 @@ import io.reactivex.functions.Action;
 import io.reactivex.functions.Consumer;
 import io.reactivex.schedulers.Schedulers;
 
-public class SearchPresenter extends RxPresenter<SearchContract.View> implements SearchContract.Presenter<SearchContract.View> {
+public class SearchPresenter extends RxPresenter<SearchContract.View>
+        implements SearchContract.Presenter<SearchContract.View> {
 
     private BookApi bookApi;
 

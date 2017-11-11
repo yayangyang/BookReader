@@ -2,9 +2,11 @@ package com.imooc.brvaheasyrecycleview.base;
 
 import android.content.Intent;
 import android.widget.EditText;
+import android.widget.ImageView;
 
 import com.chad.library.adapter.base.BaseViewHolder;
 import com.google.gson.Gson;
+import com.imooc.brvaheasyrecycleview.Bean.user.Login;
 import com.imooc.brvaheasyrecycleview.Bean.user.TencentLoginResult;
 import com.imooc.brvaheasyrecycleview.R;
 import com.imooc.brvaheasyrecycleview.ui.activity.WelcomeActivity;
@@ -34,7 +36,9 @@ public abstract class BaseLoginRvActivity<T,K extends BaseViewHolder> extends Ba
 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-        if (requestCode == Constants.REQUEST_LOGIN || requestCode == Constants.REQUEST_APPBAR) {
+        if (requestCode == Constants.REQUEST_LOGIN ||
+                requestCode == Constants.REQUEST_APPBAR||
+                requestCode == Constants.REQUEST_QQ_SHARE) {
             Tencent.onActivityResultData(requestCode, resultCode, data, loginListener);
         }
         super.onActivityResult(requestCode, resultCode, data);
@@ -65,8 +69,28 @@ public abstract class BaseLoginRvActivity<T,K extends BaseViewHolder> extends Ba
         }
     }
 
+    /**
+     * qq操作取得数据后的回调(例:qq登录,qq分享)
+     * @param result
+     */
     protected abstract void loginZhuiShu(TencentLoginResult result);
 
+    /**
+     * qq取消回调
+     */
     protected abstract void loginCancel();
+
+    /**
+     * 追书神器登录成功的回调(有登录功能需要重写)
+     * @param login
+     */
+    public abstract void loginSuccess(Login login);
+
+    /**
+     * 登录弹出框的回调(有登录功能需要重写)
+     * @param view
+     * @param type
+     */
+    public abstract void onLogin(ImageView view, String type);
 
 }

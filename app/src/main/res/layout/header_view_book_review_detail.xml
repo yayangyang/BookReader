@@ -171,10 +171,12 @@
         android:textColor="@color/common_h3" />
 
     <LinearLayout
+        android:id="@+id/llHelpfull"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="horizontal"
-        android:padding="10dp">
+        android:padding="10dp"
+        android:visibility="gone">
 
         <LinearLayout
             android:layout_width="0dp"
@@ -198,7 +200,8 @@
                 android:drawableLeft="@drawable/review_useful_yes_nor"
                 android:drawablePadding="5dp"
                 android:text="@string/book_review_detail_helpful_yes"
-                android:textColor="@color/common_h2" />
+                android:textColor="@color/common_h2"
+                android:enabled="false"/>
         </LinearLayout>
 
         <LinearLayout
@@ -223,7 +226,8 @@
                 android:drawableLeft="@drawable/review_useful_no_nor"
                 android:drawablePadding="5dp"
                 android:text="@string/book_review_detail_helpful_no"
-                android:textColor="@color/common_h2" />
+                android:textColor="@color/common_h2"
+                android:enabled="false"/>
         </LinearLayout>
 
     </LinearLayout>

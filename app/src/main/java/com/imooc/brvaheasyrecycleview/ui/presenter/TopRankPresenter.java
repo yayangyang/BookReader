@@ -21,7 +21,8 @@ import io.reactivex.functions.Consumer;
 
 import static android.R.attr.data;
 
-public class TopRankPresenter extends RxPresenter<TopRankContract.View> implements TopRankContract.Presenter<TopRankContract.View> {
+public class TopRankPresenter extends RxPresenter<TopRankContract.View>
+        implements TopRankContract.Presenter<TopRankContract.View> {
 
     private BookApi bookApi;
 

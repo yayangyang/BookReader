@@ -40,6 +40,9 @@ import com.imooc.brvaheasyrecycleview.Bean.HotWord;
 import com.imooc.brvaheasyrecycleview.Bean.InterestBookList;
 import com.imooc.brvaheasyrecycleview.Bean.MyBean.CheckLogin;
 import com.imooc.brvaheasyrecycleview.Bean.MyBean.Comment;
+import com.imooc.brvaheasyrecycleview.Bean.MyBean.MyBookReview;
+import com.imooc.brvaheasyrecycleview.Bean.MyBean.MyDiscussion;
+import com.imooc.brvaheasyrecycleview.Bean.MyBean.ReviewHelpful;
 import com.imooc.brvaheasyrecycleview.Bean.PostCount;
 import com.imooc.brvaheasyrecycleview.Bean.RankingList;
 import com.imooc.brvaheasyrecycleview.Bean.Rankings;
@@ -51,10 +54,12 @@ import com.imooc.brvaheasyrecycleview.Bean.user.Login;
 import com.imooc.brvaheasyrecycleview.Bean.user.LoginReq;
 
 import java.util.List;
+import java.util.Map;
 
 import io.reactivex.Observable;
 import retrofit2.http.Body;
 import retrofit2.http.Field;
+import retrofit2.http.FieldMap;
 import retrofit2.http.FormUrlEncoded;
 import retrofit2.http.GET;
 import retrofit2.http.POST;
@@ -401,14 +406,14 @@ public interface BookApiService {
     /**
      * 提交评论
      *
-     * @param section   section(版块)
+     * @param sectionId   sectionId(版块)
      * @param content   content(内容)
      * @param token     token(账号登录的token)
      * @return
      */
     @FormUrlEncoded//post需加上这个
-    @POST("post/{section}/comment")
-    Observable<Comment> publishReview(@Path("section") String section, @Field("content") String content, @Field("token") String token);
+    @POST("post/{sectionId}/comment")
+    Observable<Comment> publishReview(@Path("sectionId") String sectionId, @Field("content") String content, @Field("token") String token);
 
     /**
      * 检查是否登录
@@ -426,4 +431,51 @@ public interface BookApiService {
      */
     @GET("book/{bookId}/recommend")
     Observable<InterestBookList> getInterestBookList(@Path("bookId") String bookId);
+
+    /**
+     * 书评详情点赞
+     * @param sectionId   sectionId(版块)
+     * @param token         token(账号登录的token)
+     * @param is_helpful  is_helpful(是否点赞)
+     * @return
+     */
+    @FormUrlEncoded
+    @POST("post/review/{sectionId}/helpful")
+    Observable<ReviewHelpful> postReviewHelpful(@Path("sectionId") String sectionId,@Field("token") String token, @Field("is_helpful") String is_helpful);
+
+    /**
+     * 发表书评
+     * @param params
+     * @return
+     */
+    @FormUrlEncoded
+    @POST("post/review")
+    Observable<MyBookReview> publishBookReview(@FieldMap Map<String, String> params);
+
+    /**
+     * 获取历史书评
+     * @param book  bookId
+     * @param token token((账号登录的token))
+     * @return
+     */
+    @GET("post/review/one-by-book-user")
+    Observable<BookReview> getHistoryBookReview(@Query("book") String book,@Query("token") String token);
+
+    /**
+     * 发布话题
+     * @param params
+     * @return
+     */
+    @FormUrlEncoded
+    @POST("post")
+    Observable<MyDiscussion> publishConversation(@FieldMap Map<String, String> params);
+
+    /**
+     * 发布投票
+     * @param params
+     * @return
+     */
+    @FormUrlEncoded
+    @POST("post")
+    Observable<MyDiscussion> publishVote(@FieldMap Map<String, String> params);
 }

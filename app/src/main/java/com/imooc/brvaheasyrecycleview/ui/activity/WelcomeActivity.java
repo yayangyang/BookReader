@@ -170,7 +170,7 @@ public class WelcomeActivity extends BaseLoginActivity {
 
     @Override
     public void showError() {
-
+        enter();
     }
 
     @Override

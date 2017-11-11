@@ -20,7 +20,8 @@ import io.reactivex.functions.Action;
 import io.reactivex.functions.Consumer;
 
 
-public class SubjectBookListPresenter extends RxPresenter<SubjectBookListContract.View> implements SubjectBookListContract.Presenter<SubjectBookListContract.View> {
+public class SubjectBookListPresenter extends RxPresenter<SubjectBookListContract.View>
+        implements SubjectBookListContract.Presenter<SubjectBookListContract.View> {
 
     private BookApi bookApi;
 

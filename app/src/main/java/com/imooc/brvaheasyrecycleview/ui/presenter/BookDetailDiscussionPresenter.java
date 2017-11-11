@@ -19,7 +19,8 @@ import io.reactivex.disposables.Disposable;
 import io.reactivex.functions.Action;
 import io.reactivex.functions.Consumer;
 
-public class BookDetailDiscussionPresenter extends RxPresenter<BookDetailDiscussionContract.View> implements BookDetailDiscussionContract.Presenter<BookDetailDiscussionContract.View> {
+public class BookDetailDiscussionPresenter extends RxPresenter<BookDetailDiscussionContract.View>
+        implements BookDetailDiscussionContract.Presenter<BookDetailDiscussionContract.View> {
 
     private BookApi bookApi;
 

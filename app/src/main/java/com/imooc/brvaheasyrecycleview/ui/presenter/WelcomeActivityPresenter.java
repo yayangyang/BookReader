@@ -5,6 +5,7 @@ import com.imooc.brvaheasyrecycleview.api.BookApi;
 import com.imooc.brvaheasyrecycleview.base.RxPresenter;
 import com.imooc.brvaheasyrecycleview.base.BaseLoginContract;
 import com.imooc.brvaheasyrecycleview.utils.LogUtils;
+import com.imooc.brvaheasyrecycleview.utils.ToastUtils;
 
 import javax.inject.Inject;
 
@@ -50,7 +51,11 @@ public class WelcomeActivityPresenter extends RxPresenter<BaseLoginContract.View
                         new Consumer<Throwable>() {
                             @Override
                             public void accept(Throwable e) throws Exception {
+                                ToastUtils.showToast("登录失败");
                                 LogUtils.e("login" + e.toString());
+                                if(mView!=null){
+                                    mView.showError();
+                                }
                             }
                         },
                         new Action() {

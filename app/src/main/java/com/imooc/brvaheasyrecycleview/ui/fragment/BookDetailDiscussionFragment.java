@@ -1,14 +1,14 @@
 package com.imooc.brvaheasyrecycleview.ui.fragment;
 
 
-import android.content.Context;
+import android.app.AlertDialog;
+import android.content.DialogInterface;
 import android.os.Bundle;
-import android.view.MotionEvent;
 import android.view.View;
-import android.view.inputmethod.InputMethodManager;
 
 import com.chad.library.adapter.base.BaseQuickAdapter;
 import com.chad.library.adapter.base.BaseViewHolder;
+import com.imooc.brvaheasyrecycleview.Bean.BookReview;
 import com.imooc.brvaheasyrecycleview.Bean.DiscussionList;
 import com.imooc.brvaheasyrecycleview.Bean.support.SelectionEvent;
 import com.imooc.brvaheasyrecycleview.R;
@@ -17,10 +17,11 @@ import com.imooc.brvaheasyrecycleview.base.Constant;
 import com.imooc.brvaheasyrecycleview.component.AppComponent;
 import com.imooc.brvaheasyrecycleview.component.DaggerBookComponent;
 import com.imooc.brvaheasyrecycleview.ui.activity.BookDiscussionDetailActivity;
+import com.imooc.brvaheasyrecycleview.ui.activity.PublishOptionActivity;
+import com.imooc.brvaheasyrecycleview.ui.activity.PublishReviewActivity;
 import com.imooc.brvaheasyrecycleview.ui.adapter.BookDiscussionAdapter;
 import com.imooc.brvaheasyrecycleview.ui.contract.BookDetailDiscussionContract;
 import com.imooc.brvaheasyrecycleview.ui.presenter.BookDetailDiscussionPresenter;
-import com.imooc.brvaheasyrecycleview.utils.LogUtils;
 
 import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
@@ -28,6 +29,8 @@ import org.greenrobot.eventbus.ThreadMode;
 
 import java.util.ArrayList;
 import java.util.List;
+
+import butterknife.OnClick;
 
 public class BookDetailDiscussionFragment extends BaseRVFragment<BookDetailDiscussionPresenter, DiscussionList.PostsBean,BaseViewHolder>
         implements BookDetailDiscussionContract.View,BaseQuickAdapter.OnItemClickListener {
@@ -44,12 +47,15 @@ public class BookDetailDiscussionFragment extends BaseRVFragment<BookDetailDiscu
 
     private String bookId;
     private ArrayList mArrayList=new ArrayList();
+    private BookReview mBookReview=new BookReview();
+    private BookReview.ReviewBean reviewBean = new BookReview.ReviewBean();
+    private BookReview.ReviewBean.BookBean bookBean = new BookReview.ReviewBean.BookBean();
 
     private String sort = Constant.SortType.DEFAULT;
 
     @Override
     public int getLayoutResId() {
-        return R.layout.activity_easyrecyclerview;
+        return R.layout.fragment_book_detail_discussion;
     }
 
     @Override
@@ -64,6 +70,10 @@ public class BookDetailDiscussionFragment extends BaseRVFragment<BookDetailDiscu
     public void initDatas() {
         EventBus.getDefault().register(this);
         bookId = getArguments().getString(BUNDLE_ID);
+
+        bookBean._id=bookId;
+        reviewBean.book=bookBean;
+        mBookReview.review=reviewBean;
     }
 
     @Override
@@ -94,7 +104,7 @@ public class BookDetailDiscussionFragment extends BaseRVFragment<BookDetailDiscu
 
     @Override
     public void showError() {
-        loaddingError();
+        loaddingError();mAdapter.notifyDataSetChanged();
     }
 
     @Override
@@ -133,4 +143,24 @@ public class BookDetailDiscussionFragment extends BaseRVFragment<BookDetailDiscu
         DiscussionList.PostsBean data = (DiscussionList.PostsBean) mAdapter.getItem(position);
         BookDiscussionDetailActivity.startActivity(activity, data._id);
     }
+
+    @OnClick(R.id.bt_create_reviews)
+    public void create_reviews(){
+        new AlertDialog.Builder(mContext)
+                .setTitle("提示")
+                .setSingleChoiceItems(
+                        new String[]{"话题", "投票"}, 0,
+                        new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialog, int which) {
+                                if(which==0){
+                                    PublishOptionActivity.startActivity(getActivity(),false,false,mBookReview);
+                                }else{
+                                    PublishOptionActivity.startActivity(getActivity(),false,true,mBookReview);
+                                }
+                                dialog.dismiss();
+                            }
+                        }).create().show();
+    }
+
 }

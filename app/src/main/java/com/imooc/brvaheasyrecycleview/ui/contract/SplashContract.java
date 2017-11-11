@@ -9,11 +9,11 @@ import com.imooc.brvaheasyrecycleview.base.BaseContract;
 
 public interface SplashContract {
 
-    public interface View extends BaseContract.BaseView{
+    interface View extends BaseContract.BaseView{
         void showIsLogin(boolean isLogin);
     }
 
-    public interface Presenter<T> extends BaseContract.BasePresenter<T>{
+    interface Presenter<T> extends BaseContract.BasePresenter<T>{
         void checkLogin(String token);
     }
 }

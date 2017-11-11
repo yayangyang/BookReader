@@ -20,7 +20,8 @@ import io.reactivex.disposables.Disposable;
 import io.reactivex.functions.Action;
 import io.reactivex.functions.Consumer;
 
-public class TopCategoryListPresenter extends RxPresenter<TopCategoryListContract.View> implements TopCategoryListContract.Presenter<TopCategoryListContract.View> {
+public class TopCategoryListPresenter extends RxPresenter<TopCategoryListContract.View>
+        implements TopCategoryListContract.Presenter<TopCategoryListContract.View> {
 
     private BookApi bookApi;
 

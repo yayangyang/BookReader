@@ -84,7 +84,6 @@ public class SettingActivity extends BaseActivity {
                         mTvCacheSize.setText(cachesize);
                     }
                 });
-
             }
         }).start();
         mTvSort.setText(getResources().getStringArray(R.array.setting_dialog_sort_choice)[
@@ -123,8 +122,9 @@ public class SettingActivity extends BaseActivity {
                         @Override
                         public void onClick(DialogInterface dialog, int which) {
                             if(ReaderApplication.mTencent!=null){
-                                ReaderApplication.mTencent.logout(AppUtils.getAppContext());//退出QQ登录
-                                ReaderApplication.mTencent= Tencent.createInstance("222222", AppUtils.getAppContext());
+                                //退出QQ登录(这句不知道具体有什么用,退出登录后使用token仍能发送内容,即token没改变,再次打开应用仍做免登录验证)
+                                ReaderApplication.mTencent.logout(AppUtils.getAppContext());
+//                                ReaderApplication.mTencent= Tencent.createInstance("222222", AppUtils.getAppContext());
                             }
                             //去除追书神器登录信息(去除之后需要登录)
                             ReaderApplication.sLogin=null;

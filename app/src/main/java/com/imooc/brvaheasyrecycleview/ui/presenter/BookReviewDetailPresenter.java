@@ -3,11 +3,15 @@ package com.imooc.brvaheasyrecycleview.ui.presenter;
 import com.imooc.brvaheasyrecycleview.Bean.BookReview;
 import com.imooc.brvaheasyrecycleview.Bean.CommentList;
 import com.imooc.brvaheasyrecycleview.Bean.MyBean.Comment;
+import com.imooc.brvaheasyrecycleview.Bean.MyBean.ReviewHelpful;
 import com.imooc.brvaheasyrecycleview.Bean.user.Login;
 import com.imooc.brvaheasyrecycleview.api.BookApi;
 import com.imooc.brvaheasyrecycleview.base.RxPresenter;
 import com.imooc.brvaheasyrecycleview.ui.contract.BookReviewDetailContract;
+import com.imooc.brvaheasyrecycleview.utils.AppUtils;
 import com.imooc.brvaheasyrecycleview.utils.LogUtils;
+import com.imooc.brvaheasyrecycleview.utils.NetworkUtils;
+import com.imooc.brvaheasyrecycleview.utils.ToastUtils;
 
 import org.reactivestreams.Subscription;
 
@@ -144,6 +148,9 @@ public class BookReviewDetailPresenter extends RxPresenter<BookReviewDetailContr
                             @Override
                             public void accept(Throwable e) throws Exception {
                                 LogUtils.e("login" + e.toString());
+                                if(NetworkUtils.isAvailable(AppUtils.getAppContext())){
+                                    ToastUtils.showToast("网络异常");
+                                }
                             }
                         },
                         new Action() {
@@ -160,8 +167,8 @@ public class BookReviewDetailPresenter extends RxPresenter<BookReviewDetailContr
     }
 
     @Override
-    public void publishReview(String section, final String content, String token) {
-        Disposable disposable=bookApi.publishReview(section,content,token).subscribeOn(Schedulers.io())
+    public void publishReview(String sectionId, final String content, String token) {
+        Disposable disposable=bookApi.publishReview(sectionId,content,token).subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(
                         new Consumer<Comment>() {
@@ -169,6 +176,35 @@ public class BookReviewDetailPresenter extends RxPresenter<BookReviewDetailContr
                             public void accept(Comment data) throws Exception {
                                 if(data!=null&&mView!=null){
                                     mView.publishReviewResult(data,content);
+                                }
+                            }
+                        },
+                        new Consumer<Throwable>() {
+                            @Override
+                            public void accept(Throwable e) throws Exception {
+                                LogUtils.e(e.toString());
+                            }
+                        },
+                        new Action() {
+                            @Override
+                            public void run() throws Exception {
+                                LogUtils.e("完成");
+                            }
+                        }
+                );
+        addDisposable(disposable);
+    }
+
+    @Override
+    public void postReviewHelpful(String sectionId, String token, final String is_helpful) {
+        Disposable disposable=bookApi.postReviewHelpful(sectionId,token,is_helpful).subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(
+                        new Consumer<ReviewHelpful>() {
+                            @Override
+                            public void accept(ReviewHelpful data) throws Exception {
+                                if(data!=null&&mView!=null){
+                                    mView.postReviewHelpfulResult(data,is_helpful);
                                 }
                             }
                         },

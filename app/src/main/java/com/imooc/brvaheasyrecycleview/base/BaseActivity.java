@@ -2,6 +2,7 @@ package com.imooc.brvaheasyrecycleview.base;
 
 import android.annotation.TargetApi;
 import android.content.Context;
+import android.content.Intent;
 import android.graphics.Color;
 import android.os.Build;
 import android.os.Bundle;
@@ -15,14 +16,23 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.WindowManager;
 
+import com.google.gson.Gson;
+import com.imooc.brvaheasyrecycleview.Bean.user.TencentLoginResult;
 import com.imooc.brvaheasyrecycleview.R;
 import com.imooc.brvaheasyrecycleview.app.ReaderApplication;
 import com.imooc.brvaheasyrecycleview.component.AppComponent;
+import com.imooc.brvaheasyrecycleview.ui.activity.BookDetailActivity;
 import com.imooc.brvaheasyrecycleview.utils.LogUtils;
 import com.imooc.brvaheasyrecycleview.utils.SharedPreferencesUtil;
 import com.imooc.brvaheasyrecycleview.utils.StatusBarCompat;
 import com.imooc.brvaheasyrecycleview.utils.ToastUtils;
 import com.imooc.brvaheasyrecycleview.view.lodding.CustomDialog;
+import com.tencent.open.SocialConstants;
+import com.tencent.tauth.IUiListener;
+import com.tencent.tauth.Tencent;
+import com.tencent.tauth.UiError;
+
+import org.json.JSONObject;
 
 import java.lang.reflect.Method;
 

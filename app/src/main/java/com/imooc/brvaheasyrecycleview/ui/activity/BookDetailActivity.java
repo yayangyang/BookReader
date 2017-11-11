@@ -3,6 +3,7 @@ package com.imooc.brvaheasyrecycleview.ui.activity;
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.drawable.Drawable;
+import android.os.Bundle;
 import android.support.v4.app.FragmentActivity;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.widget.GridLayoutManager;
@@ -10,6 +11,8 @@ import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.text.TextUtils;
 import android.util.Log;
+import android.view.Menu;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.RelativeLayout;
@@ -17,6 +20,7 @@ import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
 import com.chad.library.adapter.base.BaseQuickAdapter;
+import com.google.gson.Gson;
 import com.imooc.brvaheasyrecycleview.Bean.BookDetail;
 import com.imooc.brvaheasyrecycleview.Bean.BookLists;
 import com.imooc.brvaheasyrecycleview.Bean.HotReview;
@@ -24,8 +28,12 @@ import com.imooc.brvaheasyrecycleview.Bean.InterestBookList;
 import com.imooc.brvaheasyrecycleview.Bean.Recommend;
 import com.imooc.brvaheasyrecycleview.Bean.RecommendBookList;
 import com.imooc.brvaheasyrecycleview.Bean.support.RefreshCollectionIconEvent;
+import com.imooc.brvaheasyrecycleview.Bean.user.Login;
+import com.imooc.brvaheasyrecycleview.Bean.user.TencentLoginResult;
 import com.imooc.brvaheasyrecycleview.R;
+import com.imooc.brvaheasyrecycleview.app.ReaderApplication;
 import com.imooc.brvaheasyrecycleview.base.BaseActivity;
+import com.imooc.brvaheasyrecycleview.base.BaseLoginActivity;
 import com.imooc.brvaheasyrecycleview.base.Constant;
 import com.imooc.brvaheasyrecycleview.component.AppComponent;
 import com.imooc.brvaheasyrecycleview.component.DaggerBookComponent;
@@ -42,10 +50,15 @@ import com.imooc.brvaheasyrecycleview.utils.ToastUtils;
 import com.imooc.brvaheasyrecycleview.view.DrawableCenterButton;
 import com.imooc.brvaheasyrecycleview.view.TagColor;
 import com.imooc.brvaheasyrecycleview.view.TagGroup;
+import com.tencent.open.SocialConstants;
+import com.tencent.tauth.IUiListener;
+import com.tencent.tauth.Tencent;
+import com.tencent.tauth.UiError;
 
 import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
 import org.greenrobot.eventbus.ThreadMode;
+import org.json.JSONObject;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -62,7 +75,7 @@ import static com.imooc.brvaheasyrecycleview.manager.EventManager.refreshCollect
  * Created by Administrator on 2017/10/18.
  */
 
-public class BookDetailActivity extends BaseActivity
+public class BookDetailActivity extends BaseLoginActivity
         implements BookDetailContract.View,BaseQuickAdapter.OnItemClickListener{
 
     public static String INTENT_BOOK_ID = "bookId";
@@ -420,6 +433,64 @@ public class BookDetailActivity extends BaseActivity
         }else if (data instanceof InterestBookList.InterestBook) {
             InterestBookList.InterestBook interestBook = (InterestBookList.InterestBook) adapter.getItem(position);
             BookDetailActivity.startActivity(this,interestBook._id);
+        }
     }
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        getMenuInflater().inflate(R.menu.menu_book_detail, menu);
+        return true;
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        if(item.getItemId()==R.id.share){
+            share();
+        }
+        return super.onOptionsItemSelected(item);
+    }
+
+    public void share() {
+        LogUtils.e("share");
+        if(loginListener==null){
+            loginListener=new BaseUIListener();
+        }
+        Bundle bundle = new Bundle();
+        //这条分享消息被好友点击后的跳转URL。
+        bundle.putString(SocialConstants.PARAM_TARGET_URL, "http://connect.qq.com/");
+        //分享的标题。注：PARAM_TITLE、PARAM_IMAGE_URL、PARAM_	SUMMARY不能全为空，最少必须有一个是有值的。
+        bundle.putString(SocialConstants.PARAM_TITLE, "我在测试");
+        //分享的图片URL
+        bundle.putString(SocialConstants.PARAM_IMAGE_URL,
+                "http://img3.cache.netease.com/photo/0005/2013-03-07/8PBKS8G400BV0005.jpg");
+        //分享的消息摘要，最长50个字
+        bundle.putString(SocialConstants.PARAM_SUMMARY, "测试");
+        //手Q客户端顶部，替换“返回”按钮文字，如果为空，用返回代替
+        bundle.putString(SocialConstants.PARAM_APPNAME, "??我在测试");
+        //标识该消息的来源应用，值为应用名称+AppId。
+        bundle.putString(SocialConstants.PARAM_APP_SOURCE, "星期几" + "222222");
+
+        ReaderApplication.mTencent.shareToQQ(this, bundle , loginListener);
+    }
+
+    @Override
+    protected void loginZhuiShu(TencentLoginResult result) {
+        LogUtils.e("取得数据"+result);
+        ToastUtils.showToast("分享成功");
+    }
+
+    @Override
+    protected void loginCancel() {
+//        ToastUtils.showToast("分享被取消");
+    }
+
+    @Override
+    public void loginSuccess(Login login) {
+
+    }
+
+    @Override
+    public void onLogin(ImageView view, String type) {
+
     }
 }

@@ -20,7 +20,8 @@ import io.reactivex.disposables.Disposable;
 import io.reactivex.functions.Action;
 import io.reactivex.functions.Consumer;
 
-public class SubjectFragmentPresenter extends RxPresenter<SubjectFragmentContract.View> implements SubjectFragmentContract.Presenter<SubjectFragmentContract.View> {
+public class SubjectFragmentPresenter extends RxPresenter<SubjectFragmentContract.View>
+        implements SubjectFragmentContract.Presenter<SubjectFragmentContract.View> {
 
     private BookApi bookApi;
 

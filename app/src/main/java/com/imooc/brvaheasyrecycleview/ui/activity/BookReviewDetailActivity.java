@@ -2,6 +2,7 @@ package com.imooc.brvaheasyrecycleview.ui.activity;
 
 import android.content.Context;
 import android.content.Intent;
+import android.graphics.Color;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -14,6 +15,7 @@ import android.view.View;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.EditText;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
@@ -23,6 +25,7 @@ import com.chad.library.adapter.base.BaseViewHolder;
 import com.imooc.brvaheasyrecycleview.Bean.BookReview;
 import com.imooc.brvaheasyrecycleview.Bean.CommentList;
 import com.imooc.brvaheasyrecycleview.Bean.MyBean.Comment;
+import com.imooc.brvaheasyrecycleview.Bean.MyBean.ReviewHelpful;
 import com.imooc.brvaheasyrecycleview.Bean.user.Login;
 import com.imooc.brvaheasyrecycleview.Bean.user.TencentLoginResult;
 import com.imooc.brvaheasyrecycleview.R;
@@ -62,7 +65,7 @@ import butterknife.OnClick;
  */
 
 public class BookReviewDetailActivity extends BaseLoginRvActivity<CommentList.CommentsBean,BaseViewHolder>
-        implements BookReviewDetailContract.View{
+        implements BookReviewDetailContract.View,View.OnClickListener{
 
     private static final String INTENT_ID = "id";
 
@@ -132,7 +135,11 @@ public class BookReviewDetailActivity extends BaseLoginRvActivity<CommentList.Co
 
         View headerView = View.inflate(this, R.layout.header_view_book_review_detail, null);
         headerViewHolder = new HeaderViewHolder(headerView);
+        headerViewHolder.llHelpfull.setVisibility(View.VISIBLE);
+        headerViewHolder.tvHelpfullYes.setOnClickListener(this);
+        headerViewHolder.tvHelpfullNo.setOnClickListener(this);
         mAdapter.addHeaderView(headerView);
+        mAdapter.setEmptyView(inflate);
         ViewUtils.setEmptyViewLayoutParams(-1,-2,mAdapter.getEmptyView());//改变空布局的宽高参数
 
         btn_send.setEnabled(false);//内容开始为空,默认不可点击
@@ -199,7 +206,7 @@ public class BookReviewDetailActivity extends BaseLoginRvActivity<CommentList.Co
                     LogUtils.e("ACTION_UP");
                     y=0;
                 }
-                return true;//消费了事件
+                return true;//消费了事件(返回false可点击接下来就执行onclick)
             }
         });
     }
@@ -239,6 +246,14 @@ public class BookReviewDetailActivity extends BaseLoginRvActivity<CommentList.Co
         headerViewHolder.ratingBar.setCountSelected(data.review.rating);
 
         this.bookReview=data;
+        if(SettingManager.getInstance().getIsSetHelpful(bookReview.review._id).equals("yes")){
+            headerViewHolder.tvHelpfullYesCount.setTextColor(Color.RED);
+        }else if(SettingManager.getInstance().getIsSetHelpful(bookReview.review._id).equals("no")){
+            headerViewHolder.tvHelpfullNoCount.setTextColor(Color.RED);
+        }else{
+            headerViewHolder.tvHelpfullYes.setEnabled(true);
+            headerViewHolder.tvHelpfullNo.setEnabled(true);
+        }
     }
 
     @Override
@@ -294,6 +309,33 @@ public class BookReviewDetailActivity extends BaseLoginRvActivity<CommentList.Co
             }
         }
         edit_add.setText("");
+    }
+
+    @Override
+    public void postReviewHelpfulResult(ReviewHelpful reviewHelpful, String is_helpful) {
+        if(reviewHelpful.ok){
+            int yesCount=Integer.valueOf(headerViewHolder.tvHelpfullYesCount.getText().toString());
+            int noCount=Integer.valueOf(headerViewHolder.tvHelpfullNoCount.getText().toString());
+            if(is_helpful.equals("yes")){
+                headerViewHolder.tvHelpfullYesCount.setText(++yesCount+"");
+            }else{
+                headerViewHolder.tvHelpfullYesCount.setText(++noCount+"");
+            }
+            if(bookReview!=null&&bookReview.review!=null&& !TextUtils.isEmpty(bookReview.review._id)){
+                SettingManager.getInstance().saveHelpful(bookReview.review._id,is_helpful);
+            }
+            ToastUtils.showToast("评价成功");
+            headerViewHolder.tvHelpfullNo.setEnabled(false);
+            headerViewHolder.tvHelpfullYes.setEnabled(false);
+            if(is_helpful.equals("yes")){
+                headerViewHolder.tvHelpfullYesCount.setTextColor(Color.RED);
+            }else{
+                headerViewHolder.tvHelpfullNoCount.setTextColor(Color.RED);
+            }
+        }else{
+            //已经评价了
+            ToastUtils.showToast("您已经评价过啦");
+        }
     }
 
     @Override
@@ -375,6 +417,34 @@ public class BookReviewDetailActivity extends BaseLoginRvActivity<CommentList.Co
         }
     }
 
+    @Override
+    public void onClick(View v) {
+        boolean hasId=false;
+        if(bookReview!=null&&bookReview.review!=null&& !TextUtils.isEmpty(bookReview.review._id)){
+            LogUtils.e("id:"+bookReview.review._id);
+            hasId=true;
+        }else{
+            ToastUtils.showToast("hasId为空");
+        }
+        if(ReaderApplication.sLogin==null||TextUtils.isEmpty(ReaderApplication.sLogin.token)){
+            ToastUtils.showToast("请先登录");
+            if (popupWindow == null) {
+                popupWindow = new LoginPopupWindow(this);
+                popupWindow.setLoginTypeListener(this);
+            }
+            //在屏幕上偏移,第一个参数由方法getWindowToken()都行(自己添加)
+            popupWindow.showAtLocation(mCommonToolbar, Gravity.CENTER, 0, 0);
+        }else{
+            String is_helpful="yes";
+            if(v.getId()==R.id.tvHelpfullNoCount){
+                is_helpful="no";
+            }
+            if(hasId&&!TextUtils.isEmpty(ReaderApplication.sLogin.token)){
+                mPresenter.postReviewHelpful(bookReview.review._id,ReaderApplication.sLogin.token,is_helpful);
+            }
+        }
+    }
+
     static class HeaderViewHolder {
         @BindView(R.id.ivAuthorAvatar)
         ImageView ivAuthorAvatar;
@@ -396,6 +466,10 @@ public class BookReviewDetailActivity extends BaseLoginRvActivity<CommentList.Co
         TextView tvHelpfullYesCount;
         @BindView(R.id.tvHelpfullNoCount)
         TextView tvHelpfullNoCount;
+        @BindView(R.id.tvHelpfullYes)
+        TextView tvHelpfullYes;
+        @BindView(R.id.tvHelpfullNo)
+        TextView tvHelpfullNo;
         @BindView(R.id.tvBestComments)
         TextView tvBestComments;
         @BindView(R.id.rvBestComments)
@@ -404,6 +478,9 @@ public class BookReviewDetailActivity extends BaseLoginRvActivity<CommentList.Co
         TextView tvCommentCount;
         @BindView(R.id.rating)
         XLHRatingBar ratingBar;
+
+        @BindView(R.id.llHelpfull)
+        LinearLayout llHelpfull;
 
         public HeaderViewHolder(View view) {
             ButterKnife.bind(this, view);   //view绑定

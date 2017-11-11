@@ -12,6 +12,7 @@ import android.support.v4.app.FragmentPagerAdapter;
 import android.support.v4.view.MenuItemCompat;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatDelegate;
+import android.text.TextUtils;
 import android.util.Log;
 import android.view.ActionProvider;
 import android.view.Gravity;
@@ -19,6 +20,8 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
+import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.request.animation.GlideAnimation;
@@ -49,6 +52,7 @@ import com.imooc.brvaheasyrecycleview.view.GenderPopupWindow;
 import com.imooc.brvaheasyrecycleview.view.LoginPopupWindow;
 import com.imooc.brvaheasyrecycleview.view.RVPIndicator;
 import com.tencent.connect.common.Constants;
+import com.tencent.open.SocialConstants;
 import com.tencent.tauth.IUiListener;
 import com.tencent.tauth.Tencent;
 import com.tencent.tauth.UiError;
@@ -204,7 +208,9 @@ public class MainActivity extends BaseActivity implements MainContract.View,Logi
     public boolean onOptionsItemSelected(MenuItem item) {
         int id = item.getItemId();
         boolean isLogin=false;
-        if(ReaderApplication.sLogin!=null&&ReaderApplication.sLogin.user!=null){
+        if(ReaderApplication.sLogin!=null&&
+                ReaderApplication.sLogin.user!=null&&
+                !TextUtils.isEmpty(ReaderApplication.sLogin.token)){
             isLogin=ReaderApplication.sLogin.ok;
         }
         switch (id) {
@@ -369,7 +375,6 @@ public class MainActivity extends BaseActivity implements MainContract.View,Logi
         if (mPresenter != null) {
             mPresenter.detachView();
         }
-
     }
 
 }

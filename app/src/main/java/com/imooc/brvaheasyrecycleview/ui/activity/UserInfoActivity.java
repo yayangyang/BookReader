@@ -2,10 +2,14 @@ package com.imooc.brvaheasyrecycleview.ui.activity;
 
 import android.content.ContextWrapper;
 import android.content.Intent;
+import android.view.View;
 
 import com.imooc.brvaheasyrecycleview.R;
 import com.imooc.brvaheasyrecycleview.base.BaseActivity;
+import com.imooc.brvaheasyrecycleview.base.Constant;
 import com.imooc.brvaheasyrecycleview.component.AppComponent;
+import com.imooc.brvaheasyrecycleview.component.DaggerBookComponent;
+import com.imooc.brvaheasyrecycleview.component.DaggerMyComponent;
 import com.imooc.brvaheasyrecycleview.utils.LogUtils;
 import com.imooc.brvaheasyrecycleview.utils.ToastUtils;
 
@@ -26,7 +30,10 @@ public class UserInfoActivity extends BaseActivity {
 
     @Override
     protected void setupActivityComponent(AppComponent appComponent) {
-
+        DaggerMyComponent.builder()
+                .appComponent(appComponent)
+                .build()
+                .inject(this);
     }
 
     @Override
@@ -47,7 +54,7 @@ public class UserInfoActivity extends BaseActivity {
 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-        if(resultCode==1){
+        if(resultCode== Constant.FINISH_ACTIVITY){
             ToastUtils.showToast("onActivityResult"+resultCode);
             finish();
         }

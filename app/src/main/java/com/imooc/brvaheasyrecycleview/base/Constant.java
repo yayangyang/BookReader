@@ -192,4 +192,18 @@ public class Constant {
         put(BookType.HXYQ, "幻想言情");
         put(BookType.DMTR, "耽美同人");
     }};
+
+    //------------------------------------------------------------------
+
+    public static final String BOOK_ID = "bookId";
+    public static final String BOOK_REVIEW = "bookReview";
+    public static final String IS_REVIEW = "isReview";
+    public static final String RATING = "rating";
+    public static final String IS_VOTE="isVote";
+    public static final String TITLE="title";
+    public static final String CONTENT="content";
+    public static final String VOTE_STRING="voteString";
+    public static final int FINISH_ACTIVITY=1;
+    public static final int RETURN_DATA=2;
+
 }

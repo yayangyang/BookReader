@@ -19,7 +19,8 @@ import io.reactivex.disposables.Disposable;
 import io.reactivex.functions.Action;
 import io.reactivex.functions.Consumer;
 
-public class SubCategoryActivityPresenter extends RxPresenter<SubCategoryActivityContract.View> implements SubCategoryActivityContract.Presenter<SubCategoryActivityContract.View> {
+public class SubCategoryActivityPresenter extends RxPresenter<SubCategoryActivityContract.View>
+        implements SubCategoryActivityContract.Presenter<SubCategoryActivityContract.View> {
 
     private BookApi bookApi;
 

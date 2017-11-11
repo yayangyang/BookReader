@@ -1,28 +1,17 @@
-/**
- * Copyright 2016 JustWayward Team
- * <p>
- * Licensed under the Apache License, Version 2.0 (the "License");
- * you may not use this file except in compliance with the License.
- * You may obtain a copy of the License at
- * <p>
- * http://www.apache.org/licenses/LICENSE-2.0
- * <p>
- * Unless required by applicable law or agreed to in writing, software
- * distributed under the License is distributed on an "AS IS" BASIS,
- * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- * See the License for the specific language governing permissions and
- * limitations under the License.
- */
 package com.imooc.brvaheasyrecycleview.Bean;
 
 
 import com.imooc.brvaheasyrecycleview.Bean.base.Base;
+
+import java.io.Serializable;
 
 /**
  * Created by lfh on 2016/9/1.
  * 书评详情
  */
 public class BookReview extends Base {
+
+    private static final long serialVersionUID = 1L;
 
     /**
      * _id : 57c70079eac0de2b0f5302ed
@@ -52,7 +41,7 @@ public class BookReview extends Base {
 
     public ReviewBean review;
 
-    public static class ReviewBean {
+    public static class ReviewBean implements Serializable{
         public String _id;
         public int rating;
         public String content;
@@ -93,14 +82,14 @@ public class BookReview extends Base {
         public String shareLink;
         public String id;
 
-        public static class BookBean {
+        public static class BookBean implements Serializable{
             public String _id;
             public String cover;
             public String title;
             public String id;
         }
 
-        public static class AuthorBean {
+        public static class AuthorBean implements Serializable{
             public String _id;
             public String avatar;
             public String nickname;
@@ -112,7 +101,7 @@ public class BookReview extends Base {
             public String id;
         }
 
-        public static class HelpfulBean {
+        public static class HelpfulBean implements Serializable{
             public int total;
             public int yes;
             public int no;

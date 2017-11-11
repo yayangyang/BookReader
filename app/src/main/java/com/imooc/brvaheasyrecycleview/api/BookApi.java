@@ -24,6 +24,9 @@ import com.imooc.brvaheasyrecycleview.Bean.HotWord;
 import com.imooc.brvaheasyrecycleview.Bean.InterestBookList;
 import com.imooc.brvaheasyrecycleview.Bean.MyBean.CheckLogin;
 import com.imooc.brvaheasyrecycleview.Bean.MyBean.Comment;
+import com.imooc.brvaheasyrecycleview.Bean.MyBean.MyBookReview;
+import com.imooc.brvaheasyrecycleview.Bean.MyBean.MyDiscussion;
+import com.imooc.brvaheasyrecycleview.Bean.MyBean.ReviewHelpful;
 import com.imooc.brvaheasyrecycleview.Bean.RankingList;
 import com.imooc.brvaheasyrecycleview.Bean.Rankings;
 import com.imooc.brvaheasyrecycleview.Bean.Recommend;
@@ -34,13 +37,14 @@ import com.imooc.brvaheasyrecycleview.Bean.user.LoginReq;
 import com.imooc.brvaheasyrecycleview.base.Constant;
 
 import java.util.List;
+import java.util.Map;
 
-import io.reactivex.Completable;
 import io.reactivex.Observable;
 import okhttp3.OkHttpClient;
 import retrofit2.Retrofit;
 import retrofit2.adapter.rxjava2.RxJava2CallAdapterFactory;
 import retrofit2.converter.gson.GsonConverterFactory;
+import retrofit2.http.FieldMap;
 import retrofit2.http.Query;
 
 public class BookApi {
@@ -211,5 +215,25 @@ public class BookApi {
 
     public Observable<InterestBookList> getInterestBookList(String bookId) {
         return service.getInterestBookList(bookId);
+    }
+
+    public Observable<ReviewHelpful> postReviewHelpful(String bookId,String token,String is_helpful) {
+        return service.postReviewHelpful(bookId,token,is_helpful);
+    }
+
+    public Observable<MyBookReview> publishBookReview(@FieldMap Map<String, String> params){
+        return service.publishBookReview(params);
+    }
+
+    public Observable<BookReview> getHistoryBookReview(String book,String token){
+        return service.getHistoryBookReview(book,token);
+    }
+
+    public Observable<MyDiscussion> publishConversation(Map<String, String> params){
+        return service.publishConversation(params);
+    }
+
+    public Observable<MyDiscussion> publishVote(@FieldMap Map<String, String> params){
+        return service.publishVote(params);
     }
 }

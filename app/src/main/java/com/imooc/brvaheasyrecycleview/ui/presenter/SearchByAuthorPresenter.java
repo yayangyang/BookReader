@@ -8,8 +8,6 @@ import com.imooc.brvaheasyrecycleview.utils.LogUtils;
 import com.imooc.brvaheasyrecycleview.utils.RxUtil;
 import com.imooc.brvaheasyrecycleview.utils.StringUtils;
 
-import org.reactivestreams.Subscription;
-
 import javax.inject.Inject;
 
 import io.reactivex.Observable;
@@ -19,7 +17,8 @@ import io.reactivex.disposables.Disposable;
 import io.reactivex.functions.Action;
 import io.reactivex.functions.Consumer;
 
-public class SearchByAuthorPresenter extends RxPresenter<SearchByAuthorContract.View> implements SearchByAuthorContract.Presenter {
+public class SearchByAuthorPresenter extends RxPresenter<SearchByAuthorContract.View>
+        implements SearchByAuthorContract.Presenter {
 
     private BookApi bookApi;
 

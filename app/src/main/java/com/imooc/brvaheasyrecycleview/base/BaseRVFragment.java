@@ -130,7 +130,9 @@ public abstract class BaseRVFragment<T1 extends BaseContract.BasePresenter, T2,K
             LogUtils.e("getItemCount:"+mAdapter.getItemCount());
             mAdapter.setEmptyView(network);
         }
-        ToastUtils.showToast("网络异常");
+        if(NetworkUtils.isAvailable(mContext)){
+            ToastUtils.showToast("网络异常");
+        }
     }
 
     @Override

@@ -243,4 +243,20 @@ public class SettingManager {
         SharedPreferencesUtil.getInstance().putObject("loginInfo",loginInfo);
     }
 
+    public String getIsSetHelpful(String sectionId){
+        return SharedPreferencesUtil.getInstance().getString(sectionId,"");
+    }
+
+    public void saveHelpful(String sectionId,String is_helpful){
+        SharedPreferencesUtil.getInstance().putString(sectionId,is_helpful);
+    }
+
+//    public String getIsSetHelpful(String sectionId){
+//        return SharedPreferencesUtil.getInstance().getString(sectionId,"");
+//    }
+//
+//    public void saveHelpful(String sectionId,String is_helpful){
+//        SharedPreferencesUtil.getInstance().putString(sectionId,is_helpful);
+//    }
+
 }
