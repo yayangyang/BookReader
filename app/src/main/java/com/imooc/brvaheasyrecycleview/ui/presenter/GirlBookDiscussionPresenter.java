@@ -45,22 +45,26 @@ public class GirlBookDiscussionPresenter extends RxPresenter<GirlBookDiscussionC
                         new Consumer<DiscussionList>() {
                             @Override
                             public void accept(DiscussionList list) throws Exception {
-                                boolean isRefresh = start == 0 ? true : false;
-                                mView.showGirlBookDisscussionList(list.posts, isRefresh);
+                                if (list != null && mView != null) {
+                                    mView.showGirlBookDisscussionList(list.posts, start);
+                                }
                             }
                         },
                         new Consumer<Throwable>() {
                             @Override
                             public void accept(Throwable e) throws Exception {
                                 LogUtils.e("onError: " + e.toString());
-                                boolean isRefresh = start == 0 ? true : false;
-                                mView.showMyError(isRefresh);
+                                if (mView != null) {
+                                    mView.showMyError(start == 0);
+                                }
                             }
                         },
                         new Action() {
                             @Override
                             public void run() throws Exception {
-                                mView.complete();
+                                if (mView != null) {
+                                    mView.complete();
+                                }
                             }
                         }
                 );

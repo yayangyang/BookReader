@@ -96,7 +96,7 @@ public class BookReviewDetailPresenter extends RxPresenter<BookReviewDetailContr
     }
 
     @Override
-    public void getBookReviewComments(String bookReviewId, int start, int limit) {
+    public void getBookReviewComments(String bookReviewId, final int start, int limit) {
         Disposable rxDisposable = bookApi.getBookReviewComments(bookReviewId, start + "", limit + "")
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
@@ -105,14 +105,16 @@ public class BookReviewDetailPresenter extends RxPresenter<BookReviewDetailContr
                             @Override
                             public void accept(CommentList data) throws Exception {
                                 if(data!=null&&mView!=null){
-                                    mView.showBookReviewComments(data);
+                                    mView.showBookReviewComments(data,start);
                                 }
                             }
                         },
                         new Consumer<Throwable>() {
                             @Override
                             public void accept(Throwable e) throws Exception {
-                                mView.showError();
+                                if (mView != null) {
+                                    mView.showError();
+                                }
                             }
                         },
                         new Action() {

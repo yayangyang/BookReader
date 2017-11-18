@@ -114,27 +114,34 @@ public class BookHelpFragment extends BaseRVFragment<BookHelpPresenter,
     }
 
     @Override
-    public void showBookHelpList(List<BookHelpList.HelpsBean> list, boolean isRefresh) {
+    public void showBookHelpList(List<BookHelpList.HelpsBean> list, int start) {
+        boolean isRefresh = start == 0;
         if(isRefresh){
             if(list!=null){
                 LogUtils.e("不为空"+list.size());
             }
             LogUtils.e("刷新");
-            start=0;
+            this.start=0;
             mAdapter.getData().clear();
             mAdapter.setEmptyView(inflate);
             mRecyclerView.scrollToPosition(0);
             mAdapter.setNewData(list);
-            start = start + list.size();
+            this.start = start + list.size();
         }else if(!isRefresh&&(list==null||list.isEmpty())){
             LogUtils.e("loadMoreEnd");
             mAdapter.loadMoreEnd();
             LogUtils.e("loadMoreEnd");
         }else{
-            LogUtils.e("loadMoreComplete");
             mAdapter.loadMoreComplete();
-            mAdapter.addData(list);
-            start = start + list.size();
+            if(this.start>start){
+                List<BookHelpList.HelpsBean> helpsBeans = mAdapter.getData().subList(0, start);
+                helpsBeans.addAll(list);
+                mAdapter.setNewData(helpsBeans);
+            }else{
+                mAdapter.addData(list);
+            }
+            LogUtils.e("loadMoreComplete"+list.size());
+            this.start = start + list.size();
         }
     }
 

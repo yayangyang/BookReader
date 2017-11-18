@@ -14,7 +14,7 @@ public interface BookDiscussionDetailContract {
 
         void showBestComments(CommentList list);
 
-        void showBookDisscussionComments(CommentList list);
+        void showBookDisscussionComments(CommentList list,int start);
 
         void publishReviewResult(Comment comment,String content);
     }

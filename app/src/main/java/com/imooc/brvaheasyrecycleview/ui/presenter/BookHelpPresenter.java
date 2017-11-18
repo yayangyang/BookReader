@@ -47,22 +47,26 @@ public class BookHelpPresenter extends RxPresenter<BookHelpContract.View> implem
                         new Consumer<BookHelpList>() {
                             @Override
                             public void accept(BookHelpList list) throws Exception {
-                                boolean isRefresh = start == 0 ? true : false;
-                                mView.showBookHelpList(list.helps, isRefresh);
+                                if (list != null && mView != null) {
+                                    mView.showBookHelpList(list.helps, start);
+                                }
                             }
                         },
                         new Consumer<Throwable>() {
                             @Override
                             public void accept(Throwable e) throws Exception {
                                 LogUtils.e("getBookHelpList:" + e.toString());
-                                boolean isRefresh = start == 0 ? true : false;
-                                mView.showMyError(isRefresh);
+                                if (mView != null) {
+                                    mView.showMyError(start == 0);
+                                }
                             }
                         },
                         new Action() {
                             @Override
                             public void run() throws Exception {
-                                mView.complete();
+                                if (mView != null) {
+                                    mView.complete();
+                                }
                             }
                         }
                 );

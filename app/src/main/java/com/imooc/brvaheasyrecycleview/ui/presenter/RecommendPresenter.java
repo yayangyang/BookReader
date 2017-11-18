@@ -69,7 +69,9 @@ public class RecommendPresenter extends RxPresenter<RecommendContract.View>
                             @Override
                             public void accept(Throwable e) throws Exception {
                                 LogUtils.e("getRecommendList", e.toString());
-                                mView.showError();
+                                if (mView != null) {
+                                    mView.showError();
+                                }
                                 LogUtils.e("测试");
                             }
                         },
@@ -77,7 +79,9 @@ public class RecommendPresenter extends RxPresenter<RecommendContract.View>
                             @Override
                             public void run() throws Exception {
                                 LogUtils.e("complete");
-                                mView.complete();
+                                if (mView != null) {
+                                    mView.complete();
+                                }
                             }
                         }
                 );

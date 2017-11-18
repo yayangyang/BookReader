@@ -74,7 +74,9 @@ public class BookReadPresenter extends RxPresenter<BookReadContract.View>
                             @Override
                             public void accept(Throwable e) throws Exception {
                                 LogUtils.e("onError: " + e);
-                                mView.netError(0);
+                                if (mView != null) {
+                                    mView.netError(0);
+                                }
                             }
                         },
                         new Action() {

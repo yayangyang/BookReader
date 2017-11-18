@@ -23,7 +23,7 @@ import java.util.List;
 public interface GirlBookDiscussionContract {
 
     interface View extends BaseContract.BaseView {
-        void showGirlBookDisscussionList(List<DiscussionList.PostsBean> list, boolean isRefresh);
+        void showGirlBookDisscussionList(List<DiscussionList.PostsBean> list, int start);
 
         void showMyError(boolean isRefresh);
     }

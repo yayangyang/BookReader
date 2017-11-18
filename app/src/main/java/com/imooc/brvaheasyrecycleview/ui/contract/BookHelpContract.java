@@ -23,7 +23,7 @@ import java.util.List;
 public interface BookHelpContract {
 
     interface View extends BaseContract.BaseView {
-        void showBookHelpList(List<BookHelpList.HelpsBean> list, boolean isRefresh);
+        void showBookHelpList(List<BookHelpList.HelpsBean> list, int start);
 
         void showMyError(boolean isRefresh);
     }

@@ -35,20 +35,26 @@ public class SubjectBookListDetailPresenter extends RxPresenter<SubjectBookListD
                         new Consumer<BookListDetail>() {
                             @Override
                             public void accept(BookListDetail data) throws Exception {
-                                mView.showBookListDetail(data);
+                                if (data != null && mView != null) {
+                                    mView.showBookListDetail(data);
+                                }
                             }
                         },
                         new Consumer<Throwable>() {
                             @Override
                             public void accept(Throwable e) throws Exception {
                                 LogUtils.e("getBookListDetail:" + e.toString());
-                                mView.showError();
+                                if (mView != null) {
+                                    mView.showError();
+                                }
                             }
                         },
                         new Action() {
                             @Override
                             public void run() throws Exception {
-                                mView.complete();
+                                if (mView != null) {
+                                    mView.complete();
+                                }
                             }
                         }
                 );

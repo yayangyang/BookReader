@@ -273,13 +273,20 @@ public class BookReviewDetailActivity extends BaseLoginRvActivity<CommentList.Co
     }
 
     @Override
-    public void showBookReviewComments(CommentList list) {
+    public void showBookReviewComments(CommentList list,int start) {
         if(list.comments==null||list.comments.isEmpty()){
             mAdapter.loadMoreEnd();
         }else{
             mAdapter.loadMoreComplete();
-            mAdapter.addData(list.comments);
-            start = start + list.comments.size();
+            if(this.start>start){
+                List<CommentList.CommentsBean> commentsBeans = mAdapter.getData().subList(0, start);
+                commentsBeans.addAll(list.comments);
+                mAdapter.setNewData(commentsBeans);
+            }else{
+                mAdapter.addData(list.comments);
+            }
+            LogUtils.e("loadMoreComplete"+list.comments.size());
+            this.start = start + list.comments.size();
         }
     }
 

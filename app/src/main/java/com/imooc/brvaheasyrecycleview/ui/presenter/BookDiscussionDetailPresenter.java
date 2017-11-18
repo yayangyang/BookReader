@@ -94,7 +94,7 @@ public class BookDiscussionDetailPresenter extends RxPresenter<BookDiscussionDet
     }
 
     @Override
-    public void getBookDisscussionComments(String disscussionId, int start, int limit) {
+    public void getBookDisscussionComments(String disscussionId, final int start, int limit) {
         Disposable rxDisposable = bookApi.getBookDisscussionComments(disscussionId, start + "", limit + "")
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
@@ -103,7 +103,7 @@ public class BookDiscussionDetailPresenter extends RxPresenter<BookDiscussionDet
                             @Override
                             public void accept(CommentList data) throws Exception {
                                 if(mView!=null&&data!=null){
-                                    mView.showBookDisscussionComments(data);
+                                    mView.showBookDisscussionComments(data,start);
                                 }
                             }
                         },
@@ -111,6 +111,9 @@ public class BookDiscussionDetailPresenter extends RxPresenter<BookDiscussionDet
                             @Override
                             public void accept(Throwable e) throws Exception {
                                 LogUtils.e("getBookDisscussionComments:" + e.toString());
+                                if(mView!=null){
+                                    mView.showError();
+                                }
                             }
                         },
                         new Action() {

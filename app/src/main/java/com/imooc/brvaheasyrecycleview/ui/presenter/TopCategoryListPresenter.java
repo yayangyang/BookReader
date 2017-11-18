@@ -53,14 +53,18 @@ public class TopCategoryListPresenter extends RxPresenter<TopCategoryListContrac
                             public void accept(Throwable e) throws Exception {
                                 LogUtils.e("wwwwwwwwwwwwwwwwwwwwwwww");
                                 LogUtils.e(e.toString());
-                                mView.complete();
+                                if (mView != null) {
+                                    mView.showError();
+                                }
                             }
                         },
                         new Action() {
                             @Override
                             public void run() throws Exception {
                                 LogUtils.i("complete");
-                                mView.complete();
+                                if (mView != null) {
+                                    mView.complete();
+                                }
                             }
                         }
                 );

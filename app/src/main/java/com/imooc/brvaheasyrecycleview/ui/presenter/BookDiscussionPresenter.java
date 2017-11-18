@@ -47,24 +47,27 @@ public class BookDiscussionPresenter extends RxPresenter<BookDiscussionContract.
                             @Override
                             public void accept(DiscussionList data) throws Exception {
                                 LogUtils.e("DiscussionList:"+data);
-                                boolean isRefresh = start == 0 ? true : false;
-                                LogUtils.e("ww"+isRefresh);
-                                mView.showBookDisscussionList(data.posts, isRefresh);
+                                if (data != null && mView != null) {
+                                    mView.showBookDisscussionList(data.posts, start);
+                                }
                             }
                         },
                         new Consumer<Throwable>() {
                             @Override
                             public void accept(Throwable e) throws Exception {
                                 LogUtils.e("getBookDisscussionList:" + e.toString());
-                                boolean isRefresh = start == 0 ? true : false;
-                                mView.showMyError(isRefresh);
+                                if (mView != null) {
+                                    mView.showMyError(start == 0);
+                                }
                             }
                         },
                         new Action() {
                             @Override
                             public void run() throws Exception {
                                 LogUtils.e("complete");
-                                mView.complete();
+                                if (mView != null) {
+                                    mView.complete();
+                                }
                             }
                         }
                 );

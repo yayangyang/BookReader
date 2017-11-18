@@ -10,6 +10,7 @@ import android.view.View;
 import com.chad.library.adapter.base.BaseQuickAdapter;
 import com.chad.library.adapter.base.BaseViewHolder;
 import com.imooc.brvaheasyrecycleview.Bean.BooksByTag;
+import com.imooc.brvaheasyrecycleview.Bean.DiscussionList;
 import com.imooc.brvaheasyrecycleview.R;
 import com.imooc.brvaheasyrecycleview.api.BookApi;
 import com.imooc.brvaheasyrecycleview.base.BaseActivity;
@@ -88,20 +89,28 @@ public class BooksByTagActivity extends BaseRVActivity<BooksByTag.TagBook,BaseVi
 
 
     @Override
-    public void showBooksByTag(List<BooksByTag.TagBook> list, boolean isRefresh) {
+    public void showBooksByTag(List<BooksByTag.TagBook> list, int start) {
+        boolean isRefresh = start == 0;
         if(isRefresh){
-            start=0;
+            this.start=0;
             mAdapter.getData().clear();
             mAdapter.setEmptyView(inflate);
             mRecyclerView.scrollToPosition(0);
             mAdapter.setNewData(list);
-            start = start + list.size();
+            this.start = start + list.size();
         }else if(!isRefresh&&(list==null||list.isEmpty())){
             mAdapter.loadMoreEnd();
         }else{
             mAdapter.loadMoreComplete();
-            mAdapter.addData(list);
-            start = start + list.size();
+            if(this.start>start){
+                List<BooksByTag.TagBook> tagBooks = mAdapter.getData().subList(0, start);
+                tagBooks.addAll(list);
+                mAdapter.setNewData(tagBooks);
+            }else{
+                mAdapter.addData(list);
+            }
+            LogUtils.e("loadMoreComplete"+list.size());
+            this.start = start + list.size();
         }
     }
 

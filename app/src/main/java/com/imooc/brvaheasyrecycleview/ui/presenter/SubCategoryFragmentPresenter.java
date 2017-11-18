@@ -42,20 +42,26 @@ public class SubCategoryFragmentPresenter extends RxPresenter<SubCategoryFragmen
                         new Consumer<BooksByCats>() {
                             @Override
                             public void accept(BooksByCats booksByCats) throws Exception {
-                                mView.showCategoryList(booksByCats, start == 0 ? true : false);
+                                if (booksByCats != null && mView != null) {
+                                    mView.showCategoryList(booksByCats, start);
+                                }
                             }
                         },
                         new Consumer<Throwable>() {
                             @Override
                             public void accept(Throwable e) throws Exception {
                                 LogUtils.e("getCategoryList:" + e.toString());
-                                mView.showError();
+                                if (mView != null) {
+                                    mView.showError();
+                                }
                             }
                         },
                         new Action() {
                             @Override
                             public void run() throws Exception {
-                                mView.complete();
+                                if (mView != null) {
+                                    mView.complete();
+                                }
                             }
                         }
                 );

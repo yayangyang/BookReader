@@ -12,6 +12,7 @@ import com.chad.library.adapter.base.BaseQuickAdapter;
 import com.chad.library.adapter.base.BaseViewHolder;
 import com.imooc.brvaheasyrecycleview.Bean.DiscussionList;
 import com.imooc.brvaheasyrecycleview.Bean.Disscussion;
+import com.imooc.brvaheasyrecycleview.Bean.HotReview;
 import com.imooc.brvaheasyrecycleview.Bean.support.SelectionEvent;
 import com.imooc.brvaheasyrecycleview.R;
 import com.imooc.brvaheasyrecycleview.app.ReaderApplication;
@@ -141,28 +142,35 @@ public class BookDiscussionFragment extends BaseRVFragment<BookDiscussionPresent
     }
 
     @Override
-    public void showBookDisscussionList(List<DiscussionList.PostsBean> list, boolean isRefresh) {
+    public void showBookDisscussionList(List<DiscussionList.PostsBean> list, int start) {
+        boolean isRefresh = start == 0;
         if(isRefresh){
             if(list!=null){
                 LogUtils.e("不为空"+list.size());
             }
             LogUtils.e("刷新");
-            start=0;
+            this.start=0;
             mAdapter.getData().clear();
             inflate.setVisibility(View.VISIBLE);
             mAdapter.setEmptyView(inflate);
             mRecyclerView.scrollToPosition(0);
             mAdapter.setNewData(list);
-            start = start + list.size();
+            this.start = start + list.size();
         }else if(!isRefresh&&list==null){
             LogUtils.e("loadMoreEnd");
             mAdapter.loadMoreEnd();
             LogUtils.e("loadMoreEnd");
         }else{
-            LogUtils.e("loadMoreComplete");
             mAdapter.loadMoreComplete();
-            mAdapter.addData(list);
-            start = start + list.size();
+            if(this.start>start){
+                List<DiscussionList.PostsBean> postsBeans = mAdapter.getData().subList(0, start);
+                postsBeans.addAll(list);
+                mAdapter.setNewData(postsBeans);
+            }else{
+                mAdapter.addData(list);
+            }
+            LogUtils.e("loadMoreComplete"+list.size());
+            this.start = start + list.size();
         }
     }
 

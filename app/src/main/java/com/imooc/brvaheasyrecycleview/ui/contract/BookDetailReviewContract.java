@@ -9,9 +9,11 @@ import java.util.List;
 public interface BookDetailReviewContract {
 
     interface View extends BaseContract.BaseView {
-        void showBookDetailReviewList(List<HotReview.Reviews> list, boolean isRefresh);
+        void showBookDetailReviewList(List<HotReview.Reviews> list, int start);
 
         void showHistoryBookReview(BookReview bookReview);
+
+        void showMyError(boolean isRefresh);
     }
 
     interface Presenter<T> extends BaseContract.BasePresenter<T> {

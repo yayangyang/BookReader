@@ -8,7 +8,7 @@ import java.util.List;
 public interface BookReviewContract {
 
     interface View extends BaseContract.BaseView {
-        void showBookReviewList(List<BookReviewList.ReviewsBean> list, boolean isRefresh);
+        void showBookReviewList(List<BookReviewList.ReviewsBean> list, int start);
 
         void showMyError(boolean isRefresh);
     }

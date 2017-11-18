@@ -48,9 +48,8 @@ public class BookDetailReviewPresenter extends RxPresenter<BookDetailReviewContr
                         new Consumer<HotReview>() {
                             @Override
                             public void accept(HotReview data) throws Exception {
-                                boolean isRefresh = start == 0 ? true : false;
                                 if(mView!=null&&data!=null){
-                                    mView.showBookDetailReviewList(data.reviews, isRefresh);
+                                    mView.showBookDetailReviewList(data.reviews, start);
                                 }
                             }
                         },
@@ -59,7 +58,7 @@ public class BookDetailReviewPresenter extends RxPresenter<BookDetailReviewContr
                             public void accept(Throwable e) throws Exception {
                                 LogUtils.e("getBookDetailReviewList:" + e.toString());
                                 if(mView!=null){
-                                    mView.showError();
+                                    mView.showMyError(start==0);
                                 }
                             }
                         },

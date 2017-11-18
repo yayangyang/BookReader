@@ -50,29 +50,31 @@ public class RxUtil {
                 String json = ACache.get(ReaderApplication.getsInstance()).getAsString(key);
                 LogUtils.d("get data from disk finish , json==" + json);
 
+                //对于设置可以加载更多的RecyclerView来说,刷新时缓存小于10的时候不显示,其他的不会影响需要显示
+                //默认设置数据给非加载更多的RecyclerView的start==1
                 if (!TextUtils.isEmpty(json)) {
-                    T t = new Gson().fromJson(json, clazz);
-                    Field[] fields = clazz.getFields();
-                    for (Field field : fields) {
-                        String className = field.getType().getSimpleName();
-                        Log.e("className01",className);
-                        // 得到属性值
-                        if (className.equalsIgnoreCase("List")) {
-                            List list = (List) field.get(t);
-                            if(start!=0||list.size()>=10){//刷新时缓存小于10的时候不显示(10按照需求定义,需保证10个item满屏或超出)
-                                //即使json转换失败还是会走一遍网络
-                                try{
-//                                    json+="w";
-                                    new Gson().fromJson(json, clazz);
-//                                    LogUtils.e("testtestGSON");
+                    try{
+                        //即使json转换失败还是会走一遍网络
+                        T t=new Gson().fromJson(json, clazz);
+                        Field[] fields = clazz.getFields();
+                        for (Field field : fields) {
+                            String className = field.getType().getSimpleName();
+                            Log.e("className01",className);
+                            // 得到属性值
+                            if (className.equalsIgnoreCase("List")) {
+                                List list = (List) field.get(t);
+                                LogUtils.e("start:"+start);
+                                LogUtils.e("list.size():"+list.size());
+                                //这个判断适合类中只有一个list,而且是关键数据
+                                if(start!=0||list.size()>=10){//刷新时缓存小于10的时候不显示(10按照需求定义,需保证10个item满屏或超出)
                                     e.onNext(json);
-                                }catch (Exception ee){
-                                    LogUtils.e("Gson转换失败");
-                                    ee.printStackTrace();
+                                    break;
                                 }
-                                break;
                             }
                         }
+                    }catch (Exception ee){
+                        LogUtils.e("Gson转换失败");
+                        ee.printStackTrace();
                     }
                 }
                 Log.e("运行到了","运行到了");
@@ -115,6 +117,7 @@ public class RxUtil {
                                             String className = field.getType().getSimpleName();
                                             Log.e("className",className);
                                             // 得到属性值
+                                            //这里当类里有List才缓存(自己根据实际情况确定缓存类是否符合list为空就不缓存,如果是,那list是关键数据)
                                             if (className.equalsIgnoreCase("List")) {
                                                 try {
                                                     List list = (List) field.get(data);
@@ -123,6 +126,8 @@ public class RxUtil {
                                                         ACache.get(ReaderApplication.getsInstance())
                                                                 .put(key, new Gson().toJson(data, clazz));
                                                         LogUtils.e("cache finish");
+                                                        //如果缓存成功可以跳出防止类中有多个list多次缓存(自己觉得)
+                                                        //类中只有一个list也可以不跳出
                                                     }
                                                 } catch (IllegalAccessException e) {
                                                     e.printStackTrace();
@@ -150,10 +155,10 @@ public class RxUtil {
                                 Schedulers.io().createWorker().schedule(new Runnable() {
                                     @Override
                                     public void run() {
-                                        LogUtils.d("get data from network finish ,start cache...");
+                                        LogUtils.e("get data from network finish ,start cache...");
                                         ACache.get(ReaderApplication.getsInstance())
                                                 .put(key, new Gson().toJson(data, data.getClass()));
-                                        LogUtils.d("cache finish");
+                                        LogUtils.e("cache finish");
                                     }
                                 });
                             }
@@ -162,4 +167,42 @@ public class RxUtil {
             }
         };
     }
+
+    /**
+     * 适用于不可以加载更多的RecyclerView,或者其他
+     * (写第二个方法原因是使用brvah若有加载更多功能会默认加载更多,这时因为线程问题可能会造成数据错乱)
+     * @param key
+     * @param start
+     * @param clazz
+     * @param <T>
+     * @return
+     */
+    public static <T> Observable secondRxCreateDiskObservable(final String key, final int start, final Class<T> clazz) {
+        return Observable.create(new ObservableOnSubscribe<String>() {
+            @Override
+            public void subscribe(ObservableEmitter<String> e) throws Exception {
+                BookReviewPresenter.threadInfo("本地处理");
+                String json = ACache.get(ReaderApplication.getsInstance()).getAsString(key);
+
+                if (!TextUtils.isEmpty(json)) {
+                    try{
+                        e.onNext(json);
+                    }catch (Exception ee){
+                        LogUtils.e("Gson转换失败");
+                        ee.printStackTrace();
+                    }
+                }
+                Log.e("运行到了","运行到了");
+                e.onComplete();
+            }
+        }).map(new Function<String,T>() {
+            @Override
+            public T apply(String s) throws Exception {
+                Log.e("call","callwwwwwwwww");
+                return new Gson().fromJson(s, clazz);
+            }
+        })
+                .subscribeOn(Schedulers.io());
+    }
+
 }

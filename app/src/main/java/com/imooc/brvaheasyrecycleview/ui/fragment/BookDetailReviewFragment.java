@@ -24,6 +24,7 @@ import com.imooc.brvaheasyrecycleview.ui.activity.PublishReviewActivity;
 import com.imooc.brvaheasyrecycleview.ui.adapter.BookDetailReviewAdapter;
 import com.imooc.brvaheasyrecycleview.ui.contract.BookDetailReviewContract;
 import com.imooc.brvaheasyrecycleview.ui.presenter.BookDetailReviewPresenter;
+import com.imooc.brvaheasyrecycleview.utils.LogUtils;
 import com.imooc.brvaheasyrecycleview.utils.ToastUtils;
 
 import org.greenrobot.eventbus.EventBus;
@@ -88,14 +89,15 @@ public class BookDetailReviewFragment extends BaseRVFragment<BookDetailReviewPre
     }
 
     @Override
-    public void showBookDetailReviewList(List<HotReview.Reviews> list, boolean isRefresh) {
+    public void showBookDetailReviewList(List<HotReview.Reviews> list, int start) {
+        boolean isRefresh = start == 0;
         if(isRefresh){
-            start=0;
+            this.start=0;
             mAdapter.getData().clear();
             mAdapter.setEmptyView(inflate);
             mRecyclerView.scrollToPosition(0);
             mAdapter.setNewData(list);
-            start = start + list.size();
+            this.start = start + list.size();
 
             if(list==null){
                 bt_create_reviews.setVisibility(View.GONE);
@@ -105,9 +107,20 @@ public class BookDetailReviewFragment extends BaseRVFragment<BookDetailReviewPre
         }else if(!isRefresh&&(list==null||list.isEmpty())){
             mAdapter.loadMoreEnd();
         }else{
+//            mAdapter.loadMoreComplete();
+//            mAdapter.addData(list);
+//            start = start + list.size();
+
             mAdapter.loadMoreComplete();
-            mAdapter.addData(list);
-            start = start + list.size();
+            if(this.start>start){
+                List<HotReview.Reviews> reviews = mAdapter.getData().subList(0, start);
+                reviews.addAll(list);
+                mAdapter.setNewData(reviews);
+            }else{
+                mAdapter.addData(list);
+            }
+            LogUtils.e("loadMoreComplete"+list.size());
+            this.start = start + list.size();
         }
     }
 
@@ -141,8 +154,16 @@ public class BookDetailReviewFragment extends BaseRVFragment<BookDetailReviewPre
     }
 
     @Override
-    public void showError() {
+    public void showMyError(boolean isRefresh) {
         loaddingError();
+        if(!isRefresh){
+            mAdapter.loadMoreFail();
+        }
+    }
+
+    @Override
+    public void showError() {
+//        loaddingError();
     }
 
     @Override
@@ -166,12 +187,13 @@ public class BookDetailReviewFragment extends BaseRVFragment<BookDetailReviewPre
     @Override
     public void onRefresh() {
         super.onRefresh();
+        mAdapter.setEnableLoadMore(false);
         mPresenter.getBookDetailReviewList(bookId, sort, 0, limit);
     }
 
     @Override
     public void onLoadMoreRequested() {
-        mPresenter.getBookDetailReviewList(sort, type, start, limit);
+        mPresenter.getBookDetailReviewList(bookId, sort, start, limit);
     }
 
     @Override

@@ -14,7 +14,7 @@ public interface BookHelpDetailContract {
 
         void showBestComments(CommentList list);
 
-        void showBookHelpComments(CommentList list);
+        void showBookHelpComments(CommentList list,int start);
 
         void publishReviewResult(Comment comment, String content);
     }

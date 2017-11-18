@@ -54,13 +54,17 @@ public class TopRankPresenter extends RxPresenter<TopRankContract.View>
                             @Override
                             public void accept(Throwable e) throws Exception {
                                 LogUtils.e("getRankList:" + e.toString());
-                                mView.complete();
+                                if (mView != null) {
+                                    mView.showError();
+                                }
                             }
                         },
                         new Action() {
                             @Override
                             public void run() throws Exception {
-                                mView.complete();
+                                if (mView != null) {
+                                    mView.complete();
+                                }
                             }
                         }
                 );

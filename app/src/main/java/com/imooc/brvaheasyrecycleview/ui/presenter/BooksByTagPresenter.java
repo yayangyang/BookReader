@@ -48,8 +48,7 @@ public class BooksByTagPresenter extends RxPresenter<BooksByTagContract.View> im
                                 if (data != null) {
                                     List<BooksByTag.TagBook> list = data.books;
                                     if (list != null && !list.isEmpty() && mView != null) {
-                                        boolean isRefresh = start==0 ? true : false;
-                                        mView.showBooksByTag(list, isRefresh);
+                                        mView.showBooksByTag(list, start);
                                     }
                                 }
                             }
@@ -63,7 +62,9 @@ public class BooksByTagPresenter extends RxPresenter<BooksByTagContract.View> im
                         new Action() {
                             @Override
                             public void run() throws Exception {
-                                mView.complete();
+                                if (mView != null) {
+                                    mView.complete();
+                                }
                             }
                         }
                 );

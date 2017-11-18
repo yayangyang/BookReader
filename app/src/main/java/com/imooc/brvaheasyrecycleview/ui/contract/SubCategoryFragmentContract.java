@@ -6,7 +6,7 @@ import com.imooc.brvaheasyrecycleview.base.BaseContract;
 public interface SubCategoryFragmentContract {
 
     interface View extends BaseContract.BaseView {
-        void showCategoryList(BooksByCats data, boolean isRefresh);
+        void showCategoryList(BooksByCats data, int start);
 
         void showError(boolean isRefresh);
     }

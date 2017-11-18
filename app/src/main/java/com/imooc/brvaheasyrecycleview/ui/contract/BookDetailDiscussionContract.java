@@ -24,7 +24,9 @@ import java.util.List;
 public interface BookDetailDiscussionContract {
 
     interface View extends BaseContract.BaseView {
-        void showBookDetailDiscussionList(List<DiscussionList.PostsBean> list, boolean isRefresh);
+        void showBookDetailDiscussionList(List<DiscussionList.PostsBean> list, int start);
+
+        void showMyError(boolean isRefresh);
     }
 
     interface Presenter<T> extends BaseContract.BasePresenter<T> {

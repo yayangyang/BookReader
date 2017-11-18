@@ -10,6 +10,7 @@ import com.chad.library.adapter.base.BaseQuickAdapter;
 import com.chad.library.adapter.base.BaseViewHolder;
 import com.imooc.brvaheasyrecycleview.Bean.BookReview;
 import com.imooc.brvaheasyrecycleview.Bean.DiscussionList;
+import com.imooc.brvaheasyrecycleview.Bean.HotReview;
 import com.imooc.brvaheasyrecycleview.Bean.support.SelectionEvent;
 import com.imooc.brvaheasyrecycleview.R;
 import com.imooc.brvaheasyrecycleview.base.BaseRVFragment;
@@ -22,6 +23,7 @@ import com.imooc.brvaheasyrecycleview.ui.activity.PublishReviewActivity;
 import com.imooc.brvaheasyrecycleview.ui.adapter.BookDiscussionAdapter;
 import com.imooc.brvaheasyrecycleview.ui.contract.BookDetailDiscussionContract;
 import com.imooc.brvaheasyrecycleview.ui.presenter.BookDetailDiscussionPresenter;
+import com.imooc.brvaheasyrecycleview.utils.LogUtils;
 
 import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
@@ -85,26 +87,43 @@ public class BookDetailDiscussionFragment extends BaseRVFragment<BookDetailDiscu
     }
 
     @Override
-    public void showBookDetailDiscussionList(List<DiscussionList.PostsBean> list, boolean isRefresh) {
+    public void showBookDetailDiscussionList(List<DiscussionList.PostsBean> list, int start) {
+        boolean isRefresh = start == 0;
         if(isRefresh){
-            start=0;
+            this.start=0;
             mAdapter.getData().clear();
             mAdapter.setEmptyView(inflate);
             mRecyclerView.scrollToPosition(0);
             mAdapter.setNewData(list);
-            start = start + list.size();
+            this.start = start + list.size();
         }else if(!isRefresh&&(list==null||list.isEmpty())){
             mAdapter.loadMoreEnd();
         }else{
             mAdapter.loadMoreComplete();
-            mAdapter.addData(list);
-            start = start + list.size();
+            if(this.start>start){
+                List<DiscussionList.PostsBean> postsBeans = mAdapter.getData().subList(0, start);
+                postsBeans.addAll(list);
+                mAdapter.setNewData(postsBeans);
+            }else{
+                mAdapter.addData(list);
+            }
+            LogUtils.e("loadMoreComplete"+list.size());
+            this.start = start + list.size();
+        }
+    }
+
+    @Override
+    public void showMyError(boolean isRefresh) {
+        loaddingError();
+        if(!isRefresh){
+            mAdapter.loadMoreFail();
         }
     }
 
     @Override
     public void showError() {
-        loaddingError();mAdapter.notifyDataSetChanged();
+//        loaddingError();
+//        mAdapter.notifyDataSetChanged();
     }
 
     @Override

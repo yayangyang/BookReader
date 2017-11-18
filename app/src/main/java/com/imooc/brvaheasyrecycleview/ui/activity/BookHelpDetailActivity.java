@@ -23,6 +23,7 @@ import com.chad.library.adapter.base.BaseQuickAdapter;
 import com.chad.library.adapter.base.BaseViewHolder;
 import com.imooc.brvaheasyrecycleview.Bean.BookHelp;
 import com.imooc.brvaheasyrecycleview.Bean.CommentList;
+import com.imooc.brvaheasyrecycleview.Bean.DiscussionList;
 import com.imooc.brvaheasyrecycleview.Bean.MyBean.Comment;
 import com.imooc.brvaheasyrecycleview.Bean.user.Login;
 import com.imooc.brvaheasyrecycleview.Bean.user.TencentLoginResult;
@@ -237,13 +238,20 @@ public class BookHelpDetailActivity extends BaseLoginRvActivity<CommentList.Comm
     }
 
     @Override
-    public void showBookHelpComments(CommentList list) {
+    public void showBookHelpComments(CommentList list,int start) {
         if(list.comments==null||list.comments.isEmpty()){
             mAdapter.loadMoreEnd();
         }else{
             mAdapter.loadMoreComplete();
-            mAdapter.addData(list.comments);
-            start = start + list.comments.size();
+            if(this.start>start){
+                List<CommentList.CommentsBean> commentsBeans = mAdapter.getData().subList(0, start);
+                commentsBeans.addAll(list.comments);
+                mAdapter.setNewData(commentsBeans);
+            }else{
+                mAdapter.addData(list.comments);
+            }
+            LogUtils.e("loadMoreComplete"+list.comments.size());
+            this.start = start + list.comments.size();
         }
     }
 

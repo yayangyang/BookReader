@@ -6,6 +6,7 @@ import android.view.View;
 
 import com.chad.library.adapter.base.BaseQuickAdapter;
 import com.chad.library.adapter.base.BaseViewHolder;
+import com.imooc.brvaheasyrecycleview.Bean.BookHelpList;
 import com.imooc.brvaheasyrecycleview.Bean.BooksByCats;
 import com.imooc.brvaheasyrecycleview.Bean.support.SubEvent;
 import com.imooc.brvaheasyrecycleview.R;
@@ -24,6 +25,7 @@ import org.greenrobot.eventbus.Subscribe;
 import org.greenrobot.eventbus.ThreadMode;
 
 import java.util.ArrayList;
+import java.util.List;
 
 public class SubCategoryFragment extends BaseRVFragment<SubCategoryFragmentPresenter, BooksByCats.BooksBean,BaseViewHolder>
         implements SubCategoryFragmentContract.View {
@@ -82,20 +84,28 @@ public class SubCategoryFragment extends BaseRVFragment<SubCategoryFragmentPrese
     }
 
     @Override
-    public void showCategoryList(BooksByCats data, boolean isRefresh) {
+    public void showCategoryList(BooksByCats data, int start) {
+        boolean isRefresh = start == 0;
         if(isRefresh){
-            start=0;
+            this.start=0;
             mAdapter.getData().clear();
             mAdapter.setEmptyView(inflate);
             mRecyclerView.scrollToPosition(0);
             mAdapter.setNewData(data.books);
-            start = start + data.books.size();
+            this.start = start + data.books.size();
         }else if(!isRefresh&&(data.books==null||data.books.isEmpty())){
             mAdapter.loadMoreEnd();
         }else{
             mAdapter.loadMoreComplete();
-            mAdapter.addData(data.books);
-            start = start + data.books.size();
+            if(this.start>start){
+                List<BooksByCats.BooksBean> booksBeans = mAdapter.getData().subList(0, start);
+                booksBeans.addAll(data.books);
+                mAdapter.setNewData(booksBeans);
+            }else{
+                mAdapter.addData(data.books);
+            }
+            LogUtils.e("loadMoreComplete"+data.books.size());
+            this.start = start + data.books.size();
         }
     }
 

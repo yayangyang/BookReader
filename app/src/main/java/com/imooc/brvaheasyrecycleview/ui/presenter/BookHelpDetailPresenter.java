@@ -38,8 +38,10 @@ public class BookHelpDetailPresenter extends RxPresenter<BookHelpDetailContract.
                 .subscribe(
                         new Consumer<BookHelp>() {
                             @Override
-                            public void accept(BookHelp bookHelp) throws Exception {
-                                mView.showBookHelpDetail(bookHelp);
+                            public void accept(BookHelp data) throws Exception {
+                                if(data!=null&&mView!=null){
+                                    mView.showBookHelpDetail(data);
+                                }
                             }
                         },
                         new Consumer<Throwable>() {
@@ -87,7 +89,7 @@ public class BookHelpDetailPresenter extends RxPresenter<BookHelpDetailContract.
     }
 
     @Override
-    public void getBookHelpComments(String disscussionId, int start, int limit) {
+    public void getBookHelpComments(String disscussionId, final int start, int limit) {
         Disposable rxDisposable = bookApi.getBookReviewComments(disscussionId, start + "", limit + "")
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
@@ -95,7 +97,7 @@ public class BookHelpDetailPresenter extends RxPresenter<BookHelpDetailContract.
                         new Consumer<CommentList>() {
                             @Override
                             public void accept(CommentList list) throws Exception {
-
+                                mView.showBookHelpComments(list,start);
                             }
                         },
                         new Consumer<Throwable>() {

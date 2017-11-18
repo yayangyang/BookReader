@@ -48,20 +48,26 @@ public class SubRankPresenter extends RxPresenter<SubRankContract.View>
                                     cats.books.add(new BooksByCats.BooksBean(bean._id, bean.cover, bean.title,
                                             bean.author, bean.cat, bean.shortIntro, bean.latelyFollower, bean.retentionRatio));
                                 }
-                                mView.showRankList(cats);
+                                if (cats != null && mView != null) {
+                                    mView.showRankList(cats);
+                                }
                             }
                         },
                         new Consumer<Throwable>() {
                             @Override
                             public void accept(Throwable e) throws Exception {
                                 LogUtils.e("getRankList:" + e.toString());
-                                mView.showError();
+                                if (mView != null) {
+                                    mView.showError();
+                                }
                             }
                         },
                         new Action() {
                             @Override
                             public void run() throws Exception {
-                                mView.complete();
+                                if (mView != null) {
+                                    mView.complete();
+                                }
                             }
                         }
                 );

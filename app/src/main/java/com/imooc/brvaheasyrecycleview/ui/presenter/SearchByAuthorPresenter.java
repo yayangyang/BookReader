@@ -40,7 +40,7 @@ public class SearchByAuthorPresenter extends RxPresenter<SearchByAuthorContract.
                         new Consumer<BooksByTag>() {
                             @Override
                             public void accept(BooksByTag booksByTag) throws Exception {
-                                if (mView != null)
+                                if (booksByTag!=null&&mView != null)
                                     mView.showSearchResultList(booksByTag.books);
                             }
                         },
@@ -56,7 +56,9 @@ public class SearchByAuthorPresenter extends RxPresenter<SearchByAuthorContract.
                             @Override
                             public void run() throws Exception {
                                 LogUtils.i("complete");
-                                mView.complete();
+                                if (mView != null) {
+                                    mView.complete();
+                                }
                             }
                         }
                 );

@@ -68,22 +68,24 @@ public class BookReviewPresenter extends RxPresenter<BookReviewContract.View> im
                             public void accept(BookReviewList data) throws Exception {
                                 LogUtils.e("accept: get data finish"+data);
                                 LogUtils.e("start:"+start+"limit"+limit);
-                                boolean isRefresh = start == 0 ? true : false;
-                                mView.showBookReviewList(data.reviews, isRefresh);
+                                mView.showBookReviewList(data.reviews, start);
                             }
                         },
                         new Consumer<Throwable>() {
                             @Override
                             public void accept(Throwable e) throws Exception {
                                 LogUtils.e("onError: "+e.toString());
-                                boolean isRefresh = start == 0 ? true : false;
-                                mView.showMyError(isRefresh);
+                                if (mView != null) {
+                                    mView.showMyError(start == 0);
+                                }
                             }
                         },
                         new Action() {
                             @Override
                             public void run() throws Exception {
-                                mView.complete();
+                                if (mView != null) {
+                                    mView.complete();
+                                }
                             }
                         }
                 );

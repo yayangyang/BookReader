@@ -24,7 +24,7 @@ public interface BooksByTagContract {
 
     interface View extends BaseContract.BaseView {
 
-        void showBooksByTag(List<BooksByTag.TagBook> list, boolean isRefresh);
+        void showBooksByTag(List<BooksByTag.TagBook> list, int start);
 
         void showError(boolean isRefresh);
     }

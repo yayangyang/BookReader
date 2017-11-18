@@ -30,7 +30,7 @@ public interface BookReviewDetailContract {
 
         void showBestComments(CommentList list);
 
-        void showBookReviewComments(CommentList list);
+        void showBookReviewComments(CommentList list,int start);
 
         void publishReviewResult(Comment comment, String content);
 

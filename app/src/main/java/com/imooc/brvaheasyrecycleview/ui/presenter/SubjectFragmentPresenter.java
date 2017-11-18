@@ -43,7 +43,9 @@ public class SubjectFragmentPresenter extends RxPresenter<SubjectFragmentContrac
                         new Consumer<BookLists>() {
                             @Override
                             public void accept(BookLists data) throws Exception {
-                                mView.showBookList(data.bookLists, start == 0 ? true : false);
+                                if (data != null && mView != null) {
+                                    mView.showBookList(data.bookLists, start == 0);
+                                }
                                 if(start==0){
                                     if (data.bookLists == null || data.bookLists.size() <= 0) {
                                         ToastUtils.showSingleToast("暂无相关书单");
@@ -55,14 +57,18 @@ public class SubjectFragmentPresenter extends RxPresenter<SubjectFragmentContrac
                             @Override
                             public void accept(Throwable e) throws Exception {
                                 LogUtils.e("getBookLists:" + e.toString());
-                                boolean isRefresh = start == 0 ? true : false;
-                                mView.showMyError(isRefresh);
+                                boolean isRefresh = start == 0;
+                                if (mView != null) {
+                                    mView.showMyError(isRefresh);
+                                }
                             }
                         },
                         new Action() {
                             @Override
                             public void run() throws Exception {
-                                mView.complete();
+                                if (mView != null) {
+                                    mView.complete();
+                                }
                             }
                         }
                 );

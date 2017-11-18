@@ -64,7 +64,7 @@ public class FormatUtils {
      * @return
      */
     public static String getDescriptionTimeFromDateString(String dateString) {
-        LogUtils.e("dateString:"+dateString);
+//        LogUtils.e("dateString:"+dateString);
         if (TextUtils.isEmpty(dateString))
             return "";
         sdf.applyPattern(FORMAT_DATE_TIME);
@@ -97,9 +97,9 @@ public class FormatUtils {
      * @return
      */
     public static String getDescriptionTimeFromDate(Date date) {
-        LogUtils.e(date.toString());
+//        LogUtils.e(date.toString());
         long delta = new Date().getTime() - date.getTime();
-        LogUtils.e(delta+"wwwwwwwwwwww");
+//        LogUtils.e(delta+"wwwwwwwwwwww");
         if (delta < 1L * ONE_MINUTE) {
             long seconds = toSeconds(delta);
             return (seconds <= 0 ? 1 : seconds) + ONE_SECOND_AGO;
