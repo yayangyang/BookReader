@@ -130,6 +130,7 @@ public abstract class BaseRVFragment<T1 extends BaseContract.BasePresenter, T2,K
             LogUtils.e("getItemCount:"+mAdapter.getItemCount());
             mAdapter.setEmptyView(network);
         }
+        LogUtils.e(NetworkUtils.isAvailable(mContext)+"");//在模拟器上运行没网络显示true(出现过这种情况)
         if(!NetworkUtils.isAvailable(mContext)){
             ToastUtils.showToast("网络异常");
         }

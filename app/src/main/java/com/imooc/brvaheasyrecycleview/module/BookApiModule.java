@@ -18,8 +18,6 @@ package com.imooc.brvaheasyrecycleview.module;
 
 import com.imooc.brvaheasyrecycleview.api.BookApi;
 import com.imooc.brvaheasyrecycleview.api.support.HeaderInterceptor;
-import com.imooc.brvaheasyrecycleview.api.support.Logger;
-import com.imooc.brvaheasyrecycleview.api.support.LoggingInterceptor;
 
 import java.util.concurrent.TimeUnit;
 

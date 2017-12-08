@@ -20,7 +20,6 @@ import java.util.List;
 
 import butterknife.BindView;
 
-
 /**
  * 综合讨论区
  */

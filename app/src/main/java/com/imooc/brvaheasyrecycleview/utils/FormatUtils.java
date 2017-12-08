@@ -17,6 +17,7 @@ package com.imooc.brvaheasyrecycleview.utils;
 
 import android.annotation.SuppressLint;
 import android.text.TextUtils;
+import android.util.Log;
 
 import java.text.SimpleDateFormat;
 import java.util.Date;
@@ -69,9 +70,9 @@ public class FormatUtils {
             return "";
         sdf.applyPattern(FORMAT_DATE_TIME);
         try {
-            long wucha=8*60*60*1000;//追书神器服务器返回时间与真实值的误差(可能为8小时)
+//            long wucha=8*60*60*1000;//追书神器服务器返回时间与真实值的误差(可能为16小时,这个时间可能会改变,没验证)
             Date parse = sdf.parse(formatZhuiShuDateString(dateString));
-            parse.setTime(parse.getTime()+wucha);
+            parse.setTime(parse.getTime());
 
             return getDescriptionTimeFromDate(parse);
         } catch (Exception e) {

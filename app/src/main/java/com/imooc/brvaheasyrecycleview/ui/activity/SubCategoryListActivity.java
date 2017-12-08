@@ -127,7 +127,7 @@ public class SubCategoryListActivity extends BaseActivity implements SubCategory
     public void configViews() {
         mIndicator.setTabItemTitles(mDatas);
         mViewPager.setAdapter(mAdapter);
-        mViewPager.setOffscreenPageLimit(4);
+        mViewPager.setOffscreenPageLimit(4);//设置预加载页面
         mIndicator.setViewPager(mViewPager, 0);
         mViewPager.addOnPageChangeListener(new ViewPager.OnPageChangeListener() {
             @Override

@@ -68,7 +68,9 @@ public class BookReviewPresenter extends RxPresenter<BookReviewContract.View> im
                             public void accept(BookReviewList data) throws Exception {
                                 LogUtils.e("accept: get data finish"+data);
                                 LogUtils.e("start:"+start+"limit"+limit);
-                                mView.showBookReviewList(data.reviews, start);
+                                if(data!=null&&mView!=null){
+                                    mView.showBookReviewList(data.reviews, start);
+                                }
                             }
                         },
                         new Consumer<Throwable>() {

@@ -223,6 +223,7 @@ public class BookDetailActivity extends BaseLoginActivity
         mTvAuthor.setText(String.format(getString(R.string.book_detail_author), data.author));
         mTvCatgory.setText(String.format(getString(R.string.book_detail_category), data.cat));
         mTvWordCount.setText(FormatUtils.formatWordCount(data.wordCount));
+        LogUtils.e(data.updated);
         mTvLatelyUpdate.setText(FormatUtils.getDescriptionTimeFromDateString(data.updated));
         mTvLatelyFollower.setText(String.valueOf(data.latelyFollower));
         mTvRetentionRatio.setText(TextUtils.isEmpty(data.retentionRatio) ?
